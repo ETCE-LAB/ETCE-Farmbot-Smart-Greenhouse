@@ -1,47 +1,81 @@
+import json
 import requests
+import csv
+from apscheduler.schedulers.background import BackgroundScheduler
+import datetime
+import time
 
-# Set your application ID, device ID, and access key
+
+def fetch_and_process_data():
+    print(f"Fetching data at {datetime.datetime.now().strftime('%m-%d %H:%M')}")
+    response = requests.get(device_url, headers=headers)
+    if response.status_code == 200:
+        print("Data retrieval successful, processing data...")
+        parse_and_save_to_csv(response.text)
+    else:
+        print("Failed to retrieve data:", response.status_code, response.text)
+
+
+def parse_and_save_to_csv(text):
+    try:
+        data = json.loads(text)
+        messages = data['result']['uplink_message']['decoded_payload']['messages']
+        received_at = data['result']['received_at']
+
+        with open('weather_data.csv', 'w', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow(['Measurement Value', 'Type', 'Received At'])
+
+            for message in messages:
+                writer.writerow([message['measurementValue'], message['type'], received_at])
+
+        print("Weather data written to CSV successfully.")
+    except json.JSONDecodeError as e:
+        print("Failed to parse JSON:", str(e))
+        handle_partial_json(text, e.pos)
+    except Exception as e:
+        print("Error during processing:", str(e))
+
+
+def handle_partial_json(text, error_position):
+    try:
+        data = json.loads(text[:error_position])
+        messages = data['result']['uplink_message']['decoded_payload']['messages']
+        received_at = data['result']['received_at']
+
+        with open('weather_data.csv', 'w', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow(['Measurement Value', 'Type', 'Received At'])
+
+            for message in messages:
+                writer.writerow([message['measurementValue'], message['type'], received_at])
+
+        print("Partial weather data written to CSV successfully.")
+    except Exception as e:
+        print("Failed to parse truncated JSON:", str(e))
+
+
 application_id = 'tuc-isse-sensorik'
-device_id = 'eui-70b3d57ed005ea4a'  # Replace with your actual device ID
-access_key = 'NNSXS.DWWKJ3GCY4SX6SYXOFIHEA2SUMFRC6UQSE7BFFI.YAJWGXZJTYZAXKPE7NJBF6MDPMGH5CNYAZ4XHHBUIETCGFLA4EEA'  # Use an environment variable or secure method to handle this
+device_id = 'eui-70b3d57ed005ea4a'
+access_key = 'NNSXS.DWWKJ3GCY4SX6SYXOFIHEA2SUMFRC6UQSE7BFFI.YAJWGXZJTYZAXKPE7NJBF6MDPMGH5CNYAZ4XHHBUIETCGFLA4EEA'
+# TODO: Hide API Key
 
-
-# Construct the URL for application data
 data_type = 'uplink_message'
-app_url = f"https://eu1.cloud.thethings.network/api/v3/as/applications/{application_id}/packages/storage/{data_type}"
+device_url = f"https://eu1.cloud.thethings.network/api/v3/as/applications/{application_id}/devices/{device_id}/packages/storage/{data_type}"
 
-# Headers for authentication
 headers = {
     'Authorization': f'Bearer {access_key}',
-    'Accept': '*/*'  # Accept any media type
+    'Accept': 'application/json'
 }
 
-# Perform the GET request
-response = requests.get(app_url, headers=headers)
+scheduler = BackgroundScheduler()
+scheduler.add_job(fetch_and_process_data, 'interval', minutes=15)
+scheduler.start()
 
-# Check if the request was successful
-if response.status_code == 200:
-    try:
-        # Try to parse JSON first
-        print("Data Retrieved Successfully:")
-        print(response.json())
-    except ValueError:
-        # Fallback if response is not JSON
-        print("Received non-JSON response:")
-        print(response.text)
-else:
-    print("Failed to retrieve data:", response.status_code, response.text)
-
-# Construct the URL for device-specific data and make a request
-device_url = f"https://eu1.cloud.thethings.network/api/v3/as/applications/{application_id}/devices/{device_id}/packages/storage/{data_type}"
-device_response = requests.get(device_url, headers=headers)
-
-if device_response.status_code == 200:
-    try:
-        print("Device Data Retrieved Successfully:")
-        print(device_response.json())
-    except ValueError:
-        print("Received non-JSON response:")
-        print(device_response.text)
-else:
-    print("Failed to retrieve device data:", device_response.status_code, device_response.text)
+try:
+    while True:
+        print("Running..." + " Time: " + time.strftime("%H:%M"))
+        time.sleep(70)
+except (KeyboardInterrupt, SystemExit):
+    scheduler.shutdown()
+    print("Scheduler shut down successfully!")
