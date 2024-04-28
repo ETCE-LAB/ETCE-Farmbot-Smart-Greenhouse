@@ -11,41 +11,21 @@ def fetch_and_process_data():
     response = requests.get(device_url, headers=headers)
     if response.status_code == 200:
         print("Data retrieval successful, processing data...")
-        parse_and_save_to_csv(response.text)
+        handle_partial_json(response.text)
     else:
         print("Failed to retrieve data:", response.status_code, response.text)
 
 
-def parse_and_save_to_csv(text):
+def handle_partial_json(text):
     try:
-        data = json.loads(text)
+        index = text.rfind('{"result"')
+        print(text[index:])
+        data = json.loads(text[index:])
         messages = data['result']['uplink_message']['decoded_payload']['messages']
         received_at = data['result']['received_at']
 
-        with open('weather_data.csv', 'w', newline='') as file:
+        with open('weather_data.csv', 'a', newline='') as file:
             writer = csv.writer(file)
-            writer.writerow(['Measurement Value', 'Type', 'Received At'])
-
-            for message in messages:
-                writer.writerow([message['measurementValue'], message['type'], received_at])
-
-        print("Weather data written to CSV successfully.")
-    except json.JSONDecodeError as e:
-        print("Failed to parse JSON:", str(e))
-        handle_partial_json(text, e.pos)
-    except Exception as e:
-        print("Error during processing:", str(e))
-
-
-def handle_partial_json(text, error_position):
-    try:
-        data = json.loads(text[:error_position])
-        messages = data['result']['uplink_message']['decoded_payload']['messages']
-        received_at = data['result']['received_at']
-
-        with open('weather_data.csv', 'w', newline='') as file:
-            writer = csv.writer(file)
-            writer.writerow(['Measurement Value', 'Type', 'Received At'])
 
             for message in messages:
                 writer.writerow([message['measurementValue'], message['type'], received_at])
@@ -67,12 +47,16 @@ headers = {
     'Authorization': f'Bearer {access_key}',
     'Accept': 'application/json'
 }
+with open('weather_data.csv', 'w', newline='') as file:
+    writer = csv.writer(file)
+    writer.writerow(['Measurement Value', 'Type', 'Received At'])
 
 scheduler = BackgroundScheduler()
-scheduler.add_job(fetch_and_process_data, 'interval', minutes=15)
+scheduler.add_job(fetch_and_process_data, 'interval', minutes=15)  # Set interval here
 scheduler.start()
 
 try:
+    fetch_and_process_data()
     while True:
         print("Running..." + " Time: " + time.strftime("%H:%M"))
         time.sleep(70)
