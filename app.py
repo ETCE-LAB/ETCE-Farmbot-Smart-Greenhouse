@@ -8,8 +8,8 @@ import datetime
 import config
 
 app = Flask(__name__)
-api = Api(app, version='1.0', title='FarmBot Weather API',
-          description='Data Endpoint for FarmBot')
+api = Api(app, version='1.0', title='FarmBot API',
+          description='Different endpoints for the FarmBot, SmartGreenhouse and Weather Station')
 
 # Swagger data model definition for API documentation
 message_model = api.model('Message', {
@@ -18,19 +18,13 @@ message_model = api.model('Message', {
     'Received At': fields.String(required=True, description='Date and time of measurement reception')
 })
 
-ns = api.namespace('weather', description='Weather operations')
-
-
-@ns.route('/')
-class Home(Resource):
-    def get(self):
-        return "Weather Station Endpoint for FarmBot. Try /fetch or /data."
+ns = api.namespace('weather', description='Endpoints for the Weather Station')
 
 
 @ns.route('/data')
 class Data(Resource):
-    @api.doc(responses={200: 'Success', 404: 'File Not Found', 500: 'Internal Server Error'})
-    @api.marshal_with(message_model, envelope='data', as_list=True)  # Use marshal_with for automatic serialization
+    @api.doc(description='Retrieve all stored weather data in JSON format.',
+             responses={200: 'Success', 404: 'File Not Found', 500: 'Internal Server Error'})
     def get(self):
         try:
             data = csv_to_json('weather_data.csv')
@@ -43,7 +37,8 @@ class Data(Resource):
 
 @ns.route('/fetch')
 class Fetch(Resource):
-    @api.doc(responses={200: 'Data Fetched Successfully'})
+    @api.doc(description='Manually trigger the fetching of weather data from the configured source.',
+             responses={200: 'Data Fetched Successfully'})
     def get(self):
         fetch_and_process_data()
         return {'status': 'fetched data successfully'}, 200
