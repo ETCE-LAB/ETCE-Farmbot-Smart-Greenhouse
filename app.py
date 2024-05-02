@@ -6,6 +6,7 @@ import csv
 from apscheduler.schedulers.background import BackgroundScheduler
 import datetime
 import config
+import os
 
 app = Flask(__name__)
 api = Api(app, version='1.0', title='FarmBot API',
@@ -52,7 +53,7 @@ def fetch_and_process_data():
     }
     response = requests.get(config.device_url, headers=headers)
     if response.status_code == 200:
-        print("Data retrieval successful, processing data...")
+        print(datetime.datetime.now().strftime('%d-%m %H:%M') + " Data retrieval successful, saving...")
         handle_partial_json(response.text)
     else:
         print("Failed to retrieve data:", response.status_code, response.text)
@@ -68,8 +69,6 @@ def handle_partial_json(text):
             writer = csv.writer(file)
             for message in messages:
                 writer.writerow([message['measurementValue'], message['type'], received_at])
-        print("Weather data written to CSV successfully.")
-        print("Awaiting next data fetch...")
     except Exception as e:
         print("Failed to parse truncated JSON:", str(e))
 
@@ -88,13 +87,15 @@ scheduler.add_job(fetch_and_process_data, 'interval', minutes=15)  # Fetch data 
 scheduler.start()
 
 # Initialize CSV file on application startup
-with open('weather_data.csv', 'w', newline='') as file:
-    writer = csv.writer(file)
-    writer.writerow(['Measurement Value', 'Type', 'Received At'])
+if not os.path.exists('weather_data.csv'):
+    with open('weather_data.csv', 'w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow(['Measurement Value', 'Type', 'Received At'])
 
 if __name__ == '__main__':
     try:
-        app.run(debug=True, use_reloader=False)
+        app.run(debug=True, use_reloader=False, host='0.0.0.0', port=5000)
     except (KeyboardInterrupt, SystemExit):
         scheduler.shutdown()
         print("Scheduler shut down successfully!")
+
