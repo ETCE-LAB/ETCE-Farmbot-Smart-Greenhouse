@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask
 from flask_restx import Api, Resource, fields
 import json
 import requests
@@ -9,14 +9,14 @@ import config
 import os
 
 app = Flask(__name__)
-api = Api(app, version='1.0', title='FarmBot API',
+api = Api(app, version='1.1', title='FarmBot API',
           description='Different endpoints for the FarmBot, SmartGreenhouse and Weather Station')
 
 # Swagger data model definition for API documentation
 message_model = api.model('Message', {
-    'Measurement Value': fields.String(required=True, description='The measurement value'),
-    'Type': fields.String(required=True, description='Type of measurement'),
-    'Received At': fields.String(required=True, description='Date and time of measurement reception')
+    'Measurement Value': fields.String(required=True, description='The measurement value', example="5.0"),
+    'Type': fields.String(required=True, description='Type of measurement (e.g., Air Temperature, Humidity, Pressure)', example="Air Temperature"),
+    'Received At': fields.String(required=True, description='Date and time of measurement reception', example="2024-05-03T07:31:56.350079173Z")
 })
 
 ns = api.namespace('weather', description='Endpoints for the Weather Station')
@@ -26,6 +26,7 @@ ns = api.namespace('weather', description='Endpoints for the Weather Station')
 class Data(Resource):
     @api.doc(description='Retrieve all stored weather data in JSON format.',
              responses={200: 'Success', 404: 'File Not Found', 500: 'Internal Server Error'})
+    @api.marshal_list_with(message_model)
     def get(self):
         try:
             data = csv_to_json('weather_data.csv')
@@ -98,4 +99,3 @@ if __name__ == '__main__':
     except (KeyboardInterrupt, SystemExit):
         scheduler.shutdown()
         print("Scheduler shut down successfully!")
-
