@@ -15,11 +15,17 @@ api = Api(app, version='1.1', title='FarmBot API',
 # Swagger data model definition for API documentation
 message_model = api.model('Message', {
     'Measurement Value': fields.String(required=True, description='The measurement value', example="5.0"),
-    'Type': fields.String(required=True, description='Type of measurement (e.g., Air Temperature, Humidity, Pressure)', example="Air Temperature"),
-    'Received At': fields.String(required=True, description='Date and time of measurement reception', example="2024-05-03T07:31:56.350079173Z")
+    'Type': fields.String(required=True, description='Type of measurement (e.g., Air Temperature, Humidity, Pressure)',
+                          example="Air Temperature"),
+    'Received At': fields.String(required=True, description='Date and time of measurement reception',
+                                 example="2024-05-03T07:31:56.350079173Z")
 })
 
+# Namespace for Weather Station
 ns = api.namespace('weatherstation', description='Endpoints for the Weather Station')
+
+# Namespace for Forecast
+forecast_ns = api.namespace('forecast', description='Endpoints for Weather Forecast')
 
 
 @ns.route('/data')
@@ -44,6 +50,33 @@ class Fetch(Resource):
     def get(self):
         fetch_and_process_data()
         return {'status': 'fetched data successfully'}, 200
+
+
+@forecast_ns.route('/get')
+class Forecast(Resource):
+    @api.doc(description='Retrieve the weather forecast for a specified location.',
+             responses={200: 'Success', 400: 'Bad Request', 500: 'Internal Server Error'})
+    def get(self):
+        try:
+            forecast_data = fetch_weather_forecast()
+            return forecast_data, 200
+        except requests.exceptions.RequestException as e:
+            api.abort(400, str(e))
+        except Exception as e:
+            api.abort(500, str(e))
+
+
+def fetch_weather_forecast():
+    api_key = config.weather_forecast_api_key
+    forecast_url = config.weather_forecast_url
+    params = {
+        'q': 'ExampleCity',  # Modify this parameter based on user input or configuration
+        'appid': api_key,
+        'units': 'metric'
+    }
+    response = requests.get(forecast_url, params=params)
+    response.raise_for_status()  # Will raise an exception for 4XX/5XX responses
+    return response.json()
 
 
 def fetch_and_process_data():
