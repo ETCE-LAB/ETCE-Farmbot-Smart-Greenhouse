@@ -19,7 +19,7 @@ message_model = api.model('Message', {
     'Received At': fields.String(required=True, description='Date and time of measurement reception', example="2024-05-03T07:31:56.350079173Z")
 })
 
-ns = api.namespace('weather', description='Endpoints for the Weather Station')
+ns = api.namespace('weatherstation', description='Endpoints for the Weather Station')
 
 
 @ns.route('/data')
@@ -39,7 +39,7 @@ class Data(Resource):
 
 @ns.route('/fetch')
 class Fetch(Resource):
-    @api.doc(description='Manually trigger the fetching of weather data from the configured source.',
+    @api.doc(description='Manually trigger the fetching of weather data from TheThingsNetwork.',
              responses={200: 'Data Fetched Successfully'})
     def get(self):
         fetch_and_process_data()
@@ -49,10 +49,10 @@ class Fetch(Resource):
 def fetch_and_process_data():
     print(f"Fetching data at {datetime.datetime.now().strftime('%m-%d %H:%M')}")
     headers = {
-        'Authorization': f'Bearer {config.access_key}',
+        'Authorization': f'Bearer {config.weatherstation_access_key}',
         'Accept': 'application/json'
     }
-    response = requests.get(config.device_url, headers=headers)
+    response = requests.get(config.weatherstation_device_url, headers=headers)
     if response.status_code == 200:
         print(datetime.datetime.now().strftime('%d-%m %H:%M') + " Data retrieval successful, saving...")
         handle_partial_json(response.text)
