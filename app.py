@@ -14,6 +14,30 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///weather_data.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
+weather_station_model = api.model('WeatherStationData', {
+    'id': fields.Integer(description='The unique identifier of the measurement'),
+    'measurement_value': fields.Float(required=True, description='Value of the measurement'),
+    'measurement_type': fields.String(required=True, description='Type of the measurement'),
+    'received_at': fields.String(required=True, description='ISO date string when the measurement was received')
+})
+
+weather_forecast_model = api.model('WeatherForecastData', {
+    'id': fields.Integer(description='The unique identifier of the forecast'),
+    'date': fields.String(required=True, description='The date of the forecast'),
+    'max_temperature': fields.Float(description='The maximum temperature of the day'),
+    'min_temperature': fields.Float(description='The minimum temperature of the day'),
+    'sunshine_duration_minutes': fields.Integer(description='The duration of sunshine in minutes'),
+    'precipitation_mm': fields.Float(description='The amount of precipitation in mm')
+})
+
+water_usage_model = api.model('WaterUsage', {
+    'water_volume': fields.Float(description='The volume of water stored in liters')
+})
+
+power_usage_model = api.model('PowerUsage', {
+    'power_consumption': fields.Float(description='The power consumption in kWh')
+})
+
 
 class WeatherStationData(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -43,12 +67,14 @@ def create_tables():
 
 
 # Namespace for Weather Station and Forecast
-ns = api.namespace('weatherstation', description='Endpoints for the Weather Station')
+station_ns = api.namespace('station', description='Endpoints for the Weather Station')
 forecast_ns = api.namespace('forecast', description='Endpoints for Weather Forecast')
+water_ns = api.namespace('water', description='Endpoints for Water usage')
+power_ns = api.namespace('power', description='Endpoints for Power usage')
 
-
-@ns.route('/data')
+@station_ns.route('/data')
 class Data(Resource):
+    @station_ns.marshal_list_with(weather_station_model)
     def get(self):
         with app.app_context():
             data = WeatherStationData.query.all()
@@ -59,7 +85,7 @@ class Data(Resource):
                 api.abort(404, 'Data not found')
 
 
-@ns.route('/fetch')
+@station_ns.route('/fetch')
 class Fetch(Resource):
     def get(self):
         fetch_and_process_data()
@@ -68,6 +94,7 @@ class Fetch(Resource):
 
 @forecast_ns.route('/get/<date>')
 class Forecast(Resource):
+    @station_ns.marshal_list_with(weather_forecast_model)
     def get(self, date):
         with app.app_context():
             forecast_data = WeatherForecastData.query.filter_by(date=date).first()
@@ -80,6 +107,7 @@ class Forecast(Resource):
 
 @forecast_ns.route('/range/<start_date>/<end_date>')
 class ForecastRange(Resource):
+    @station_ns.marshal_list_with(weather_forecast_model)
     @api.doc(description='Retrieve the weather forecast for a range of dates.',
              params={'start_date': 'The start date of the forecast range (format YYYY-MM-DD)',
                      'end_date': 'The end date of the forecast range (format YYYY-MM-DD)'},
@@ -96,6 +124,20 @@ class ForecastRange(Resource):
             api.abort(400, str(e))
         except Exception as e:
             api.abort(500, str(e))
+
+
+@water_ns.route('/volume')
+class WaterUsage(Resource):
+    @water_ns.marshal_with(water_usage_model)
+    def get(self):
+        return {'water_volume': 100}, 200
+
+
+@power_ns.route('/consumption')
+class PowerUsage(Resource):
+    @power_ns.marshal_with(power_usage_model)
+    def get(self):
+        return {'power_consumption': 10}, 200
 
 
 def fetch_weather_forecast_range(start_date, end_date):
