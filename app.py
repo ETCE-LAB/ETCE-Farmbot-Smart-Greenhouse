@@ -12,19 +12,6 @@ app = Flask(__name__)
 api = Api(app, version='2.0', title='FarmBot API',
           description='Different endpoints for the FarmBot, SmartGreenhouse and Weather Station')
 
-# Swagger data model definition for API documentation
-message_model = api.model('WeatherData', {
-    'Date': fields.String(required=True, description='The date of the weather data', example="2024-05-03"),
-    'Temperature Max': fields.Float(required=False, description='Maximum temperature (°C) for the day, forecasted or observed', example=25.0),
-    'Temperature Min': fields.Float(required=False, description='Minimum temperature (°C) for the day, forecasted or observed', example=15.0),
-    'Current Temperature': fields.Float(required=False, description='Current temperature (°C) at the time of measurement', example=20.0),
-    'Humidity': fields.Float(required=False, description='Humidity percentage', example=80.0),
-    'Precipitation': fields.Float(required=False, description='Precipitation amount (mm)', example=2.0),
-    'Sunshine Duration': fields.Float(required=False, description='Duration of sunshine in minutes', example=50),
-    'Wind Speed': fields.Float(required=False, description='Wind speed (km/h)', example=10),
-    'Received At': fields.String(required=True, description='Date and time of measurement reception or forecast generation', example="2024-05-03T07:31:56.350079173Z"),
-    'Description': fields.String(required=False, description='Weather description', example="Partly cloudy")
-})
 
 # Namespace for Weather Station
 ns = api.namespace('weatherstation', description='Endpoints for the Weather Station')
@@ -37,7 +24,6 @@ forecast_ns = api.namespace('forecast', description='Endpoints for Weather Forec
 class Data(Resource):
     @api.doc(description='Retrieve all stored weather data in JSON format.',
              responses={200: 'Success', 404: 'File Not Found', 500: 'Internal Server Error'})
-    @api.marshal_list_with(message_model)
     def get(self):
         try:
             data = csv_to_json('weather_data.csv')
