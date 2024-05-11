@@ -7,55 +7,75 @@ import datetime
 
 
 def fetch_weather_forecast(date):
-    response = requests.get(config.weather_forecast_url.format(date=date))
+    response = requests.get(config.weather_forecast_url)
     response.raise_for_status()
     data = response.json()
-    forecast_data = None
-    for forecast in data['forecasts']:
-        if forecast['date'] == date:
+    for i, day in enumerate(data['daily']['time']):
+        if day == date:
+            sunshine_duration_minutes = int(data['daily']['sunshine_duration'][i] / 60)
             forecast_data = WeatherForecastData(
-                date=date,
-                max_temperature=forecast['temperature']['max'],
-                min_temperature=forecast['temperature']['min'],
-                sunshine_duration_minutes=int(forecast['sunshine_duration'] / 60),
-                precipitation_mm=forecast['precipitation']
+                date=day,
+                max_temperature=data['daily']['temperature_2m_max'][i],
+                min_temperature=data['daily']['temperature_2m_min'][i],
+                sunshine_duration_minutes=sunshine_duration_minutes,
+                precipitation_mm=data['daily']['precipitation_sum'][i]
             )
             db.session.add(forecast_data)
             db.session.commit()
+            print(datetime.datetime.now().strftime('%d-%m %H:%M') + " Forecast fetch successful, saving...")
             return {
-                'date': date,
-                'max_temperature': forecast['temperature']['max'],
-                'min_temperature': forecast['temperature']['min'],
-                'sunshine_duration_minutes': int(forecast['sunshine_duration'] / 60),
-                'precipitation_mm': forecast['precipitation']
+                'date': day,
+                'max_temperature': data['daily']['temperature_2m_max'][i],
+                'min_temperature': data['daily']['temperature_2m_min'][i],
+                'sunshine_duration_minutes': sunshine_duration_minutes,
+                'precipitation_mm': data['daily']['precipitation_sum'][i]
             }
-    if not forecast_data:
-        raise ValueError('Forecast not found for the given date')
+    return None
 
 
 def fetch_weather_forecast_range(start_date, end_date):
-    response = requests.get(config.weather_forecast_range_url.format(start_date=start_date, end_date=end_date))
+    response = requests.get(config.weather_forecast_url)
     response.raise_for_status()
     data = response.json()
     forecast_list = []
-    for forecast in data['forecasts']:
-        forecast_data = WeatherForecastData(
-            date=forecast['date'],
-            max_temperature=forecast['temperature']['max'],
-            min_temperature=forecast['temperature']['min'],
-            sunshine_duration_minutes=int(forecast['sunshine_duration'] / 60),
-            precipitation_mm=forecast['precipitation']
-        )
-        db.session.add(forecast_data)
-        forecast_list.append({
-            'date': forecast['date'],
-            'max_temperature': forecast['temperature']['max'],
-            'min_temperature': forecast['temperature']['min'],
-            'sunshine_duration_minutes': int(forecast['sunshine_duration'] / 60),
-            'precipitation_mm': forecast['precipitation']
-        })
-    db.session.commit()
-    return forecast_list
+    start_index = next((i for i, date in enumerate(data['daily']['time']) if date == start_date), None)
+    end_index = next((i for i, date in enumerate(data['daily']['time']) if date == end_date), None)
+
+    if start_index is not None and end_index is not None and start_index <= end_index:
+        for i in range(start_index, end_index + 1):
+            date = data['daily']['time'][i]
+            max_temperature = data['daily']['temperature_2m_max'][i]
+            min_temperature = data['daily']['temperature_2m_min'][i]
+            sunshine_duration_minutes = int(data['daily']['sunshine_duration'][i] / 60)
+            precipitation_mm = data['daily']['precipitation_sum'][i]
+
+            forecast_data = WeatherForecastData.query.filter_by(date=date).first()
+            if forecast_data:
+                forecast_data.max_temperature = max_temperature
+                forecast_data.min_temperature = min_temperature
+                forecast_data.sunshine_duration_minutes = sunshine_duration_minutes
+                forecast_data.precipitation_mm = precipitation_mm
+            else:
+                forecast_data = WeatherForecastData(
+                    date=date,
+                    max_temperature=max_temperature,
+                    min_temperature=min_temperature,
+                    sunshine_duration_minutes=sunshine_duration_minutes,
+                    precipitation_mm=precipitation_mm
+                )
+                db.session.add(forecast_data)
+
+            forecast_list.append({
+                'date': date,
+                'max_temperature': max_temperature,
+                'min_temperature': min_temperature,
+                'sunshine_duration_minutes': sunshine_duration_minutes,
+                'precipitation_mm': precipitation_mm
+            })
+        db.session.commit()
+        print(datetime.datetime.now().strftime('%d-%m %H:%M') + " Range forecast fetch successful, saving...")
+        return forecast_list
+    return None
 
 
 def fetch_and_process_data():
