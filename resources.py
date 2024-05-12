@@ -25,9 +25,10 @@ class Data(Resource):
 
 @station_ns.route('/fetch')
 class Fetch(Resource):
-    def get(self):
+    @staticmethod
+    def get():
         fetch_and_process_data()
-        return {'status': 'fetched data successfully'}, 200
+        return {'status': 'fetching newest data...'}, 200
 
 
 @forecast_ns.route('/get/<date>')
