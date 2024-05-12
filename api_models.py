@@ -17,10 +17,3 @@ weather_forecast_model = api.model('WeatherForecastData', {
     'precipitation_mm': fields.Float(description='The amount of precipitation in mm')
 })
 
-water_usage_model = api.model('WaterUsage', {
-    'water_volume': fields.Float(description='The volume of water stored in liters')
-})
-
-power_usage_model = api.model('PowerUsage', {
-    'power_consumption': fields.Float(description='The power consumption in kWh')
-})
