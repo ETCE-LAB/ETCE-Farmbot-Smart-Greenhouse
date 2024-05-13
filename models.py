@@ -30,3 +30,13 @@ class WaterManagementData(db.Model):
 
     def __repr__(self):
         return f"<WaterManagementData {self.water_usage} {self.received_at}>"
+
+
+class SensorData(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    measurement_value = db.Column(db.Float, nullable=False)
+    measurement_type = db.Column(db.String(50), nullable=False)
+    received_at = db.Column(db.String(120), nullable=False)
+
+    def __repr__(self):
+        return f"<SensorData {self.measurement_type} {self.received_at}>"
