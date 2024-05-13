@@ -89,8 +89,12 @@ def fetch_and_process_data():
         if response.status_code == 200:
             print(datetime.datetime.now().strftime('%d-%m %H:%M') + " Station fetch successful, saving...")
             handle_partial_json(response.text)
+            return {'message': "Data fetched and saved successfully", 'code': 200}
         else:
-            print(f"Failed to retrieve data with status code {response.status_code}")
+            error_message = f"Failed to retrieve data with status code {response.status_code}"
+            print(error_message)
+            print(response.text)
+            return {'message': error_message, 'code': response.status_code}
 
 
 def handle_partial_json(text):

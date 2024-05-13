@@ -27,8 +27,8 @@ class Data(Resource):
 class Fetch(Resource):
     @staticmethod
     def get():
-        fetch_and_process_data()
-        return {'status': 'fetching newest data...'}, 200
+        result = fetch_and_process_data()
+        return {'status': result['message']}, result['code']
 
 
 @forecast_ns.route('/get/<date>')
