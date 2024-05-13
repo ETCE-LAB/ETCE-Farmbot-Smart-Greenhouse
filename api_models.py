@@ -14,6 +14,12 @@ weather_forecast_model = api.model('WeatherForecastData', {
     'max_temperature': fields.Float(description='The maximum temperature of the day'),
     'min_temperature': fields.Float(description='The minimum temperature of the day'),
     'sunshine_duration_minutes': fields.Integer(description='The duration of sunshine in minutes'),
-    'precipitation_mm': fields.Float(description='The amount of precipitation in mm')
+    'precipitation_mm': fields.Float(description='The amount of precipitation in mm. 1mm = 1l/m²')
+})
+
+water_management_model = api.model('WaterManagementData', {
+    'id': fields.Integer(description='The unique identifier of the measurement'),
+    'date': fields.String(required=True, description='The date of the reading'),
+    'volume': fields.Float(description='The stored volume of water in liters')
 })
 

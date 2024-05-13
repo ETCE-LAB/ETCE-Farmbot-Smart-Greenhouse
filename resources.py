@@ -1,6 +1,6 @@
 from app import api, db
-from models import WeatherStationData, WeatherForecastData
-from api_models import weather_station_model, weather_forecast_model
+from models import WeatherStationData, WeatherForecastData, WaterManagementData
+from api_models import weather_station_model, weather_forecast_model, water_management_model
 from flask_restx import Resource, Namespace
 
 from services import fetch_and_process_data, fetch_weather_forecast_range, fetch_weather_forecast
@@ -9,6 +9,7 @@ station_ns = Namespace('station', description='Endpoints for the Weather Station
 forecast_ns = Namespace('forecast', description='Endpoints for Weather Forecast')
 water_ns = Namespace('water', description='Endpoints for Water usage')
 power_ns = Namespace('power', description='Endpoints for Power usage')
+water_ns = Namespace('water', description='Endpoints for Water management')
 
 
 @station_ns.route('/data')
@@ -52,3 +53,14 @@ class ForecastRange(Resource):
             return forecast_data, 200
         else:
             api.abort(404, 'No data found for the specified range')
+
+
+@water_ns.route('/volume')
+class Water(Resource):
+    @water_ns.marshal_list_with(water_management_model)
+    def get(self):
+        data = WaterManagementData.query.all()
+        if data:
+            return [{'date': item.date, 'volume': item.volume} for item in data], 200
+        else:
+            api.abort(404, 'Data not found')

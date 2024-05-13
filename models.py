@@ -21,3 +21,12 @@ class WeatherForecastData(db.Model):
 
     def __repr__(self):
         return f"<WeatherForecastData {self.date}>"
+
+
+class WaterManagementData(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    date = db.Column(db.String(120), nullable=False)
+    volume = db.Column(db.Float)
+
+    def __repr__(self):
+        return f"<WaterManagementData {self.water_usage} {self.received_at}>"
