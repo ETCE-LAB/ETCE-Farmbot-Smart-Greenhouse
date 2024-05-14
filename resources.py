@@ -78,7 +78,7 @@ class Fetch(Resource):
 class SensorData(Resource):
     @sensor_ns.marshal_list_with(sensor_data_model)
     def get(self):
-        data = WeatherStationData.query.all()
+        data = SensorData.query.all()
         if data:
             return [{'measurement_value': item.measurement_value, 'measurement_type': item.measurement_type,
                      'received_at': item.received_at} for item in data], 200
@@ -86,9 +86,12 @@ class SensorData(Resource):
             api.abort(404, 'Data not found')
 
 
-@sequence_ns.route('/sequence<sequence_id>')
+@sequence_ns.route('/sequence<sequence_id>')  # send sequenz_id to FarmBot
 # Placeholder for starting a sequence
 class Fetch(Resource):
     @staticmethod
-    def get():
-        return {'status': 'Not implemented yet'}, 501
+    def get(sequence_id):
+        return {'status': 'Not implemented yet',
+                'sequence_id': sequence_id,
+                'sequenz_name': 'Placeholder'
+                }, 501
