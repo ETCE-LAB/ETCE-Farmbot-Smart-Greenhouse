@@ -1,14 +1,15 @@
 from app import api, db
-from models import WeatherStationData, WeatherForecastData
-from api_models import weather_station_model, weather_forecast_model
+from models import WeatherStationData, WeatherForecastData, WaterManagementData
+from api_models import weather_station_model, weather_forecast_model, water_management_model  # , sensor_data_model
 from flask_restx import Resource, Namespace
 
 from services import fetch_and_process_data, fetch_weather_forecast_range, fetch_weather_forecast
 
 station_ns = Namespace('station', description='Endpoints for the Weather Station')
 forecast_ns = Namespace('forecast', description='Endpoints for Weather Forecast')
-water_ns = Namespace('water', description='Endpoints for Water usage')
-power_ns = Namespace('power', description='Endpoints for Power usage')
+water_ns = Namespace('water', description='Endpoints for Water management')
+sensor_ns = Namespace('sensor', description='Endpoints for Sensor data')
+sequence_ns = Namespace('sequence', description='Endpoints for managing sequences')
 
 
 @station_ns.route('/data')
@@ -52,3 +53,46 @@ class ForecastRange(Resource):
             return forecast_data, 200
         else:
             api.abort(404, 'No data found for the specified range')
+
+
+@water_ns.route('/volume')
+class Water(Resource):
+    @water_ns.marshal_list_with(water_management_model)
+    def get(self):
+        data = WaterManagementData.query.all()
+        if data:
+            return [{'date': item.date, 'volume': item.volume} for item in data], 200
+        else:
+            api.abort(404, 'Data not found')
+
+
+@water_ns.route('/measure')
+# Placeholder for measuring water volume
+class Fetch(Resource):
+    @staticmethod
+    def get():
+        return {'status': 'Not implemented yet'}, 501
+
+
+'''@sensor_ns.route('/data')
+class SensorData(Resource):
+    @sensor_ns.marshal_list_with(sensor_data_model)
+    def get(self):
+        data = SensorData.query.all()
+        if data:
+            return [{'measurement_value': item.measurement_value, 'measurement_type': item.measurement_type,
+                     'received_at': item.received_at} for item in data], 200
+        else:
+            api.abort(404, 'Data not found')
+
+
+@sequence_ns.route('/sequence<sequence_id>')  # send sequenz_id to FarmBot
+# Placeholder for starting a sequence
+class Fetch(Resource):
+    @staticmethod
+    def get(sequence_id):
+        return {'status': 'Not implemented yet',
+                'sequence_id': sequence_id,
+                'sequenz_name': 'Placeholder'
+                }, 501
+'''
