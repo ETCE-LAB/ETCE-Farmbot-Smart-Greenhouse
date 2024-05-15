@@ -1,6 +1,6 @@
 from app import api, db
 from models import WeatherStationData, WeatherForecastData, WaterManagementData
-from api_models import weather_station_model, weather_forecast_model, water_management_model, sensor_data_model
+from api_models import weather_station_model, weather_forecast_model, water_management_model  # , sensor_data_model
 from flask_restx import Resource, Namespace
 
 from services import fetch_and_process_data, fetch_weather_forecast_range, fetch_weather_forecast
@@ -74,7 +74,7 @@ class Fetch(Resource):
         return {'status': 'Not implemented yet'}, 501
 
 
-@sensor_ns.route('/data')
+'''@sensor_ns.route('/data')
 class SensorData(Resource):
     @sensor_ns.marshal_list_with(sensor_data_model)
     def get(self):
@@ -95,3 +95,4 @@ class Fetch(Resource):
                 'sequence_id': sequence_id,
                 'sequenz_name': 'Placeholder'
                 }, 501
+'''

@@ -15,6 +15,7 @@ from resources import station_ns, forecast_ns, water_ns, sequence_ns, sensor_ns
 api.add_namespace(station_ns)
 api.add_namespace(forecast_ns)
 api.add_namespace(water_ns)
+'''
 api.add_namespace(sequence_ns)
 api.add_namespace(sensor_ns)
-
+'''
