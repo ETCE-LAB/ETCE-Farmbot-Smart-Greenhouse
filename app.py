@@ -10,12 +10,19 @@ db = SQLAlchemy(app)
 api = Api(app, version='2.0', title='FarmBot API',
           description='Endpoints for FarmBot, SmartGreenhouse, and Weather Station')
 
-from resources import station_ns, forecast_ns, water_ns, sequence_ns, sensor_ns
+from resources import station_ns, forecast_ns, water_ns, farmbot_ns
 
+print("Registering namespaces...")
 api.add_namespace(station_ns)
 api.add_namespace(forecast_ns)
 api.add_namespace(water_ns)
+api.add_namespace(farmbot_ns)
+print("Namespaces registered.")
 '''
 api.add_namespace(sequence_ns)
 api.add_namespace(sensor_ns)
 '''
+
+if __name__ == "__main__":
+    print("Starting Flask app...")
+    app.run(debug=True)
