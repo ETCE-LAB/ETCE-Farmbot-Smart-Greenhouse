@@ -1,7 +1,6 @@
-# move_farmbot.py
-import json
 from urllib.error import HTTPError
 from farmbot import Farmbot, FarmbotToken
+import config
 
 
 def get_farmbot_token(email, password, url):
@@ -21,8 +20,8 @@ class MyHandler:
         self.target_z = target_z
 
     def on_connect(self, bot, mqtt_client):
-        request_id1 = bot.move_absolute(x=self.target_x, y=self.target_y, z=self.target_z)
-        print("MOVE_ABS REQUEST ID: " + request_id1)
+        bot.move_absolute(x=self.target_x, y=self.target_y, z=self.target_z)
+        bot.send_message("Moving to target coordinates...")
 
     def on_change(self, bot, state):
         print("Current position: (%.2f, %.2f, %.2f)" % bot.position())
@@ -46,21 +45,22 @@ class MyHandler:
 
 
 def move_to(x, y, z):
-    email = "a.kannenberg@ostfalia.de"
-    password = "DigitFarmBot2024!"
-    url = "https://my.farm.bot"
+    email = config.farmbot_email
+    password = config.farmbot_password
+    url = config.farmbot_url
 
     token = get_farmbot_token(email, password, url)
     fb = Farmbot(token)
 
-    handler = MyHandler(x, y, z)
+    handler = MyHandler(x, y, -z)
     try:
         fb.connect(handler)
     except KeyboardInterrupt:
-        # Clean up and exit
         return {
             'status': 'FarmBot has reached the target coordinates',
             'x': x,
             'y': y,
-            'z': z
+            'z': z,
         }
+# TODO: Implement function to execute sequence
+# TODO: Use https://github.com/FarmBot/farmbot-py

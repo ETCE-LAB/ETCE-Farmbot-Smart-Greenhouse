@@ -1,5 +1,5 @@
 from app import api, db
-from farmbot_commands.move_farmbot import move_to
+from farmbot_commands.manage_farmbot import move_to
 from models import WeatherStationData, WeatherForecastData, WaterManagementData
 from api_models import weather_station_model, weather_forecast_model, water_management_model  # , sensor_data_model
 from flask_restx import Resource, Namespace
@@ -81,7 +81,7 @@ class Move(Resource):
     def get(x, y, z):
         move_to(x, y, z)
         return {
-            'status': 'Moving FarmBot',
+            'status': 'Reached target coordinates',
             'x': x,
             'y': y,
             'z': z
