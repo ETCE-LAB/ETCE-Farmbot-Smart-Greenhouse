@@ -77,7 +77,7 @@ farmbot_api_key = "YOUR_FARMBOT_API_KEY"
   ```json
   {
     "id": integer,
-    "date": "string",
+    "date": string,
     "max_temperature": float,
     "min_temperature": float,
     "sunshine_duration_minutes": integer,

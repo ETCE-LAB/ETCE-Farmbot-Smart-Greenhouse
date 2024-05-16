@@ -1,8 +1,8 @@
 from app import api, db
+from farmbot_commands.move_farmbot import move_to
 from models import WeatherStationData, WeatherForecastData, WaterManagementData
 from api_models import weather_station_model, weather_forecast_model, water_management_model  # , sensor_data_model
 from flask_restx import Resource, Namespace
-
 from services import fetch_and_process_data, fetch_weather_forecast_range, fetch_weather_forecast
 
 station_ns = Namespace('station', description='Endpoints for the Weather Station')
@@ -10,6 +10,7 @@ forecast_ns = Namespace('forecast', description='Endpoints for Weather Forecast'
 water_ns = Namespace('water', description='Endpoints for Water management')
 sensor_ns = Namespace('sensor', description='Endpoints for Sensor data')
 sequence_ns = Namespace('sequence', description='Endpoints for managing sequences')
+farmbot_ns = Namespace('farmbot', description='Endpoints for FarmBot')
 
 
 @station_ns.route('/data')
@@ -72,6 +73,19 @@ class Fetch(Resource):
     @staticmethod
     def get():
         return {'status': 'Not implemented yet'}, 501
+
+
+@farmbot_ns.route('/move/<float:x>/<float:y>/<float:z>')
+class Move(Resource):
+    @staticmethod
+    def get(x, y, z):
+        move_to(x, y, z)
+        return {
+            'status': 'Moving FarmBot',
+            'x': x,
+            'y': y,
+            'z': z
+        }, 200
 
 
 '''@sensor_ns.route('/data')
