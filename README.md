@@ -76,12 +76,12 @@ farmbot_api_key = "YOUR_FARMBOT_API_KEY"
 - **Response**:
   ```json
   {
-    "id": integer,
-    "date": string,
-    "max_temperature": float,
-    "min_temperature": float,
-    "sunshine_duration_minutes": integer,
-    "precipitation_mm": float
+    "id": 0,
+    "date": "string",
+    "max_temperature": 0,
+    "min_temperature": 0,
+    "sunshine_duration_minutes": 0,
+    "precipitation_mm": 0
   }
   ```
 
@@ -92,22 +92,21 @@ farmbot_api_key = "YOUR_FARMBOT_API_KEY"
 - **Response**:
   ```json
   {
-    "id": integer,
-    "date": "string",
-    "max_temperature": float,
-    "min_temperature": float,
-    "sunshine_duration_minutes": integer,
-    "precipitation_mm": float
+    "id": 0,
+    "date": "start_date",
+    "max_temperature": 0,
+    "min_temperature": 0,
+    "sunshine_duration_minutes": 0,
+    "precipitation_mm": 0
   },
   {
-    "id": integer,
-    "date": "string",
-    "max_temperature": float,
-    "min_temperature": float,
-    "sunshine_duration_minutes": integer,
-    "precipitation_mm": float
-  },
-   ...
+    "id": 0,
+    "date": "end_date",
+    "max_temperature": 0,
+    "min_temperature": 0,
+    "sunshine_duration_minutes": 0,
+    "precipitation_mm": 0
+  }
   ```
 
 ### Fetch and Process Data from Weather Station
@@ -117,10 +116,10 @@ farmbot_api_key = "YOUR_FARMBOT_API_KEY"
 - **Response**:
   ```json
   {
-    "id": integer,
-    "measurement_value": float,
-    "measurement_type": string,
-    "received_at": string
+    "id": 0,
+    "measurement_value": 0,
+    "measurement_type": "string",
+    "received_at": "string"
   }
   ```
 

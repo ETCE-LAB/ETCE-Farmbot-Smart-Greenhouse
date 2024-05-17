@@ -23,7 +23,8 @@ water_management_model = api.model('WaterManagementData', {
     'volume': fields.Float(description='The stored volume of water in liters')
 })
 
-'''sensor_data_model = api.model('SensorData', {
+'''
+sensor_data_model = api.model('SensorData', {
     'id': fields.Integer(description='The unique identifier of the measurement'),
     'measurement_value': fields.Float(required=True, description='Value of the measurement'),
     'measurement_type': fields.String(required=True, description='Type of the measurement'),
