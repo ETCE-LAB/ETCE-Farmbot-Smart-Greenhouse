@@ -1,6 +1,7 @@
 from app import db
 
 
+
 class WeatherStationData(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     measurement_value = db.Column(db.Float, nullable=False)

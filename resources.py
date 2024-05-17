@@ -5,6 +5,7 @@ from api_models import weather_station_model, weather_forecast_model, water_mana
 from flask_restx import Resource, Namespace
 from services import fetch_and_process_data, fetch_weather_forecast_range, fetch_weather_forecast
 
+
 station_ns = Namespace('station', description='Endpoints for the Weather Station')
 forecast_ns = Namespace('forecast', description='Endpoints for Weather Forecast')
 water_ns = Namespace('water', description='Endpoints for Water management')
