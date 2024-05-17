@@ -6,7 +6,6 @@ import json
 from datetime import datetime
 
 
-
 def fetch_weather_forecast(date):
     with app.app_context():
         try:
