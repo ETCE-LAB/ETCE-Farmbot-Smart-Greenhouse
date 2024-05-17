@@ -3,35 +3,43 @@ import config
 from app import db, app
 from models import WeatherStationData, WeatherForecastData
 import json
-import datetime
+from datetime import datetime
 
 
 def fetch_weather_forecast(date):
     with app.app_context():
-        response = requests.get(config.weather_forecast_url)
-        response.raise_for_status()
-        data = response.json()
-        for i, day in enumerate(data['daily']['time']):
-            if day == date:
-                sunshine_duration_minutes = int(data['daily']['sunshine_duration'][i] / 60)
-                forecast_data = WeatherForecastData(
-                    date=day,
-                    max_temperature=data['daily']['temperature_2m_max'][i],
-                    min_temperature=data['daily']['temperature_2m_min'][i],
-                    sunshine_duration_minutes=sunshine_duration_minutes,
-                    precipitation_mm=data['daily']['precipitation_sum'][i]
-                )
-                db.session.add(forecast_data)
-                db.session.commit()
-                print(datetime.datetime.now().strftime('%d-%m %H:%M') + " Forecast fetch successful, saving...")
-                return {
-                    'date': day,
-                    'max_temperature': data['daily']['temperature_2m_max'][i],
-                    'min_temperature': data['daily']['temperature_2m_min'][i],
-                    'sunshine_duration_minutes': sunshine_duration_minutes,
-                    'precipitation_mm': data['daily']['precipitation_sum'][i]
-                }
+        try:
+            response = requests.get(config.weather_forecast_url)
+            response.raise_for_status()
+            data = response.json()
+
+            for i, day in enumerate(data['daily']['time']):
+                if day == date:
+                    sunshine_duration_minutes = int(data['daily']['sunshine_duration'][i] / 60)
+                    forecast_data = WeatherForecastData(
+                        date=day,
+                        max_temperature=data['daily']['temperature_2m_max'][i],
+                        min_temperature=data['daily']['temperature_2m_min'][i],
+                        sunshine_duration_minutes=sunshine_duration_minutes,
+                        precipitation_mm=data['daily']['precipitation_sum'][i],
+                        fetched_at=datetime.now()
+                    )
+                    db.session.add(forecast_data)
+                    db.session.commit()
+                    print(datetime.now().strftime('%d-%m %H:%M') + " Forecast fetch successful, saving...")
+                    return {
+                        'date': day,
+                        'max_temperature': data['daily']['temperature_2m_max'][i],
+                        'min_temperature': data['daily']['temperature_2m_min'][i],
+                        'sunshine_duration_minutes': sunshine_duration_minutes,
+                        'precipitation_mm': data['daily']['precipitation_sum'][i]
+                    }
+        except requests.RequestException as e:
+            print(f"Request failed: {e}")
+        except Exception as e:
+            print(f"An error occurred: {e}")
         return None
+
 
 
 def fetch_weather_forecast_range(start_date, end_date):
@@ -75,7 +83,7 @@ def fetch_weather_forecast_range(start_date, end_date):
                     'precipitation_mm': precipitation_mm
                 })
             db.session.commit()
-            print(datetime.datetime.now().strftime('%d-%m %H:%M') + " Range forecast fetch successful, saving...")
+            print(datetime.now().strftime('%d-%m %H:%M') + " Range forecast fetch successful, saving...")
             return forecast_list
         return None
 
@@ -87,7 +95,7 @@ def fetch_and_process_data():
         }
         response = requests.get(config.weatherstation_device_url, headers=headers)
         if response.status_code == 200:
-            print(datetime.datetime.now().strftime('%d-%m %H:%M') + " Station fetch successful, saving...")
+            print(datetime.now().strftime('%d-%m %H:%M') + " Station fetch successful, saving...")
             handle_partial_json(response.text)
             return {'message': "Data fetched and saved successfully", 'code': 200}
         else:
@@ -99,16 +107,18 @@ def fetch_and_process_data():
 
 def handle_partial_json(text):
     with app.app_context():
-        index = text.rfind(
-            '{"result"')
+        index = text.rfind('{"result"')
         data = json.loads(text[index:])
         messages = data['result']['uplink_message']['decoded_payload']['messages']
         received_at = data['result']['received_at']
+        fetched_at = datetime.now()
+
         for message in messages:
             weather_data = WeatherStationData(
                 measurement_value=message['measurementValue'],
                 measurement_type=message['type'],
-                received_at=received_at
+                received_at=received_at,
+                fetched_at=fetched_at
             )
             db.session.add(weather_data)
         db.session.commit()
