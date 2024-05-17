@@ -2,6 +2,7 @@ from app import db
 from datetime import datetime
 
 
+
 class WeatherStationData(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     measurement_value = db.Column(db.Float, nullable=False)
