@@ -30,7 +30,7 @@ class MyHandler:
 
         if xyz == (self.target_x, self.target_y, self.target_z):
             print(
-                f"FarmBot has reached the coordinates ({self.target_x}, {self.target_y}, {self.target_z}). Stopping the script.")
+                f"FarmBot has reached the coordinates ({self.target_x}, {self.target_y}, {self.target_z}). Disconnecting from FarmBot.")
             raise KeyboardInterrupt
 
     def on_log(self, bot, log):
@@ -38,10 +38,12 @@ class MyHandler:
 
     def on_response(self, bot, response):
         print("ID of successful request: " + response.id)
+        bot.send_message("Successfully moved to target coordinates")
 
     def on_error(self, bot, response):
         print("ID of failed request: " + response.id)
         print("Reason(s) for failure: " + str(response.errors))
+        bot.send_message("Failed to move to target coordinates")
 
 
 def move_to(x, y, z):
@@ -62,5 +64,5 @@ def move_to(x, y, z):
             'y': y,
             'z': z,
         }
-# TODO: Implement function to execute sequence
+# TODO: Implement function to execute sequence step by step using bot.move_absolute() and bot.toggle_pin()
 # TODO: Use https://github.com/FarmBot/farmbot-py

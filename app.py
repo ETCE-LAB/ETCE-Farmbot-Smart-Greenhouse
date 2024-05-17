@@ -18,6 +18,7 @@ api.add_namespace(forecast_ns)
 api.add_namespace(water_ns)
 api.add_namespace(farmbot_ns)
 print("Namespaces registered.")
+
 '''
 api.add_namespace(sequence_ns)
 api.add_namespace(sensor_ns)
