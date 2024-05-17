@@ -93,7 +93,7 @@ farmbot_api_key = "YOUR_FARMBOT_API_KEY"
   ```json
   {
     "id": 0,
-    "date": "string",
+    "date": "start_date",
     "max_temperature": 0,
     "min_temperature": 0,
     "sunshine_duration_minutes": 0,
@@ -101,13 +101,12 @@ farmbot_api_key = "YOUR_FARMBOT_API_KEY"
   },
   {
     "id": 0,
-    "date": "string",
+    "date": "end_date",
     "max_temperature": 0,
     "min_temperature": 0,
     "sunshine_duration_minutes": 0,
     "precipitation_mm": 0
-  },
-   ...
+  }
   ```
 
 ### Fetch and Process Data from Weather Station
