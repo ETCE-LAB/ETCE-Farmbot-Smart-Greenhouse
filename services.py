@@ -6,6 +6,7 @@ import json
 from datetime import datetime
 
 
+
 def fetch_weather_forecast(date):
     with app.app_context():
         try:
@@ -39,7 +40,6 @@ def fetch_weather_forecast(date):
         except Exception as e:
             print(f"An error occurred: {e}")
         return None
-
 
 
 def fetch_weather_forecast_range(start_date, end_date):
