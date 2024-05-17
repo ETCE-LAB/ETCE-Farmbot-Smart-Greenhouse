@@ -4,7 +4,7 @@ from app import db, app
 from models import WeatherStationData, WeatherForecastData
 import json
 from datetime import datetime
-
+from flask import jsonify
 
 
 def fetch_weather_forecast(date):
@@ -26,20 +26,13 @@ def fetch_weather_forecast(date):
                         fetched_at=datetime.now()
                     )
                     db.session.add(forecast_data)
-                    db.session.commit()
-                    print(datetime.now().strftime('%d-%m %H:%M') + " Forecast fetch successful, saving...")
-                    return {
-                        'date': day,
-                        'max_temperature': data['daily']['temperature_2m_max'][i],
-                        'min_temperature': data['daily']['temperature_2m_min'][i],
-                        'sunshine_duration_minutes': sunshine_duration_minutes,
-                        'precipitation_mm': data['daily']['precipitation_sum'][i]
-                    }
+            db.session.commit()
+            print(datetime.now().strftime('%d-%m %H:%M') + " Forecast fetch successful, data saved.")
+
         except requests.RequestException as e:
             print(f"Request failed: {e}")
         except Exception as e:
             print(f"An error occurred: {e}")
-        return None
 
 
 def fetch_weather_forecast_range(start_date, end_date):
@@ -47,7 +40,7 @@ def fetch_weather_forecast_range(start_date, end_date):
         response = requests.get(config.weather_forecast_url)
         response.raise_for_status()
         data = response.json()
-        forecast_list = []
+
         start_index = next((i for i, date in enumerate(data['daily']['time']) if date == start_date), None)
         end_index = next((i for i, date in enumerate(data['daily']['time']) if date == end_date), None)
 
@@ -71,21 +64,16 @@ def fetch_weather_forecast_range(start_date, end_date):
                         max_temperature=max_temperature,
                         min_temperature=min_temperature,
                         sunshine_duration_minutes=sunshine_duration_minutes,
-                        precipitation_mm=precipitation_mm
+                        precipitation_mm=precipitation_mm,
+                        fetched_at=datetime.now()
                     )
                     db.session.add(forecast_data)
 
-                forecast_list.append({
-                    'date': date,
-                    'max_temperature': max_temperature,
-                    'min_temperature': min_temperature,
-                    'sunshine_duration_minutes': sunshine_duration_minutes,
-                    'precipitation_mm': precipitation_mm
-                })
             db.session.commit()
-            print(datetime.now().strftime('%d-%m %H:%M') + " Range forecast fetch successful, saving...")
-            return forecast_list
-        return None
+            print(datetime.now().strftime('%d-%m %H:%M') + " Range forecast fetch successful, data saved.")
+
+        else:
+            print("Date range not found in the data.")
 
 
 def fetch_and_process_data():
@@ -103,6 +91,21 @@ def fetch_and_process_data():
             print(error_message)
             print(response.text)
             return {'message': error_message, 'code': response.status_code}
+
+
+def get_weather_forecast_by_date(date):
+    with app.app_context():
+        forecast_data = WeatherForecastData.query.filter_by(date=date).first()
+        if forecast_data:
+            return jsonify({
+                'date': forecast_data.date.strftime('%Y-%m-%d'),
+                'max_temperature': forecast_data.max_temperature,
+                'min_temperature': forecast_data.min_temperature,
+                'sunshine_duration_minutes': forecast_data.sunshine_duration_minutes,
+                'precipitation_mm': forecast_data.precipitation_mm
+            })
+        else:
+            return jsonify({'error': 'No forecast data available for this date'}), 404
 
 
 def handle_partial_json(text):
