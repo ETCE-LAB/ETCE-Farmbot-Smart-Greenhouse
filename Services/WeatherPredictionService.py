@@ -2,7 +2,7 @@ import requests
 import config
 from app import db, app
 from DataLayer.Models.models import WeatherStationData, WeatherForecastData
-import json
+#import json
 from datetime import datetime
 from flask import jsonify
 
