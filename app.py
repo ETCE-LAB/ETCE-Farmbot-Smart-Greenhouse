@@ -10,7 +10,7 @@ db = SQLAlchemy(app)
 api = Api(app, version='2.0', title='FarmBot API',
           description='Endpoints for FarmBot, SmartGreenhouse, and Weather Station')
 
-from Controllers.resources import station_ns, forecast_ns, water_ns, farmbot_ns
+from Controllers import station_ns, forecast_ns, water_ns, farmbot_ns
 
 print("Registering namespaces...")
 api.add_namespace(station_ns)
