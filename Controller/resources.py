@@ -1,12 +1,13 @@
+'''
 from flask import abort
 from werkzeug.exceptions import NotFound
 
 from app import api, db
 from farmbot_commands.manage_farmbot import move_to
-from models import WeatherStationData, WeatherForecastData, WaterManagementData
-from api_models import weather_station_model, weather_forecast_model, water_management_model  # , sensor_data_model
+from DataLayer.Models.models import WeatherStationData, WeatherForecastData, WaterManagementData
+from DataLayer.Models.api_models import weather_station_model, weather_forecast_model, water_management_model  # , sensor_data_model
 from flask_restx import Resource, Namespace
-from services import fetch_and_process_data, fetch_weather_forecast_range, fetch_weather_forecast
+from Services.services import fetch_and_process_data, fetch_weather_forecast_range, fetch_weather_forecast
 from datetime import datetime
 
 station_ns = Namespace('station', description='Endpoints for the Weather Station')
@@ -73,7 +74,7 @@ class Water(Resource):
         except Exception as e:
             water_ns.abort(500, f"Internal server error: {str(e)}")
 
-
+#wo kommt der  markierte Code rein in WeatherPredicitionController oder WeatherStationController . mir ist verwirrt . 
 @farmbot_ns.route('/move/<float:x>/<float:y>/<float:z>')
 class Move(Resource):
     def get(self, x, y, z):
@@ -89,7 +90,7 @@ class Move(Resource):
             farmbot_ns.abort(500, f"Error moving FarmBot: {str(e)}")
 
 
-'''
+
 @sensor_ns.route('/data')
 class SensorData(Resource):
     @sensor_ns.marshal_list_with(sensor_data_model)
@@ -100,4 +101,4 @@ class SensorData(Resource):
                      'received_at': item.received_at} for item in data], 200
         else:
             api.abort(404, 'Data not found')
-'''
+#'''

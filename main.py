@@ -1,5 +1,5 @@
 from app import app, db
-from scheduler import scheduler
+from Scheduler.scheduler import scheduler
 
 
 def create_tables():
