@@ -6,7 +6,7 @@ from farmbot_commands.manage_farmbot import move_to
 from DataLayer.Models.models import WeatherStationData, WeatherForecastData, WaterManagementData
 from DataLayer.Models.api_models import weather_station_model, weather_forecast_model, water_management_model  # , sensor_data_model
 from flask_restx import Resource, Namespace
-from Services.services import fetch_and_process_data, fetch_weather_forecast_range, fetch_weather_forecast
+from Services.WeatherStationService import fetch_and_process_data
 from datetime import datetime
 
 
