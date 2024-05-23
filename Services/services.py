@@ -1,10 +1,13 @@
+'''
 import requests
 import config
 from app import db, app
-from models import WeatherStationData, WeatherForecastData
+from DataLayer.Models.models import WeatherStationData, WeatherForecastData
 import json
 from datetime import datetime
 from flask import jsonify
+
+from DataLayer.WeatherPredictionRepository import add_forecast_data,commit_changes
 
 
 def fetch_weather_forecast(date):
@@ -25,8 +28,10 @@ def fetch_weather_forecast(date):
                         precipitation_mm=data['daily']['precipitation_sum'][i],
                         fetched_at=datetime.now()
                     )
-                    db.session.add(forecast_data)
-            db.session.commit()
+                    #db.session.add(forecast_data)
+                    add_forecast_data(forecast_data)
+            #db.session.commit()
+            commit_changes()
             print(datetime.now().strftime('%d-%m %H:%M') + " Forecast fetch successful, data saved.")
 
         except requests.RequestException as e:
@@ -107,7 +112,7 @@ def get_weather_forecast_by_date(date):
         else:
             return jsonify({'error': 'No forecast data available for this date'}), 404
 
-
+#in repo ??
 def handle_partial_json(text):
     with app.app_context():
         index = text.rfind('{"result"')
@@ -125,3 +130,4 @@ def handle_partial_json(text):
             )
             db.session.add(weather_data)
         db.session.commit()
+'''

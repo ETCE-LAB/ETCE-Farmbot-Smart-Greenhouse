@@ -1,5 +1,6 @@
 from app import app, db
-from scheduler import scheduler
+from Scheduler.WeatherPredictionScheduler import scheduler
+from Scheduler.WeatherStationScheduler import scheduler
 
 
 def create_tables():
