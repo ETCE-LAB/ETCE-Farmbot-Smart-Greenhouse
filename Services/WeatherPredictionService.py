@@ -2,7 +2,7 @@ import requests
 import config
 from app import db, app
 from DataLayer.Models.models import WeatherStationData, WeatherForecastData
-#import json
+# import json
 from datetime import datetime
 from flask import jsonify
 
@@ -27,9 +27,9 @@ def fetch_weather_forecast(date):
                         precipitation_mm=data['daily']['precipitation_sum'][i],
                         fetched_at=datetime.now()
                     )
-                    #db.session.add(forecast_data)
+                    # db.session.add(forecast_data)
                     add_forecast_data(forecast_data)
-            #db.session.commit()
+            # db.session.commit()
             commit_changes()
             print(datetime.now().strftime('%d-%m %H:%M') + " Forecast fetch successful, data saved.")
 
@@ -37,6 +37,7 @@ def fetch_weather_forecast(date):
             print(f"Request failed: {e}")
         except Exception as e:
             print(f"An error occurred: {e}")
+
 
 def fetch_weather_forecast_range(start_date, end_date):
     with app.app_context():
@@ -70,15 +71,14 @@ def fetch_weather_forecast_range(start_date, end_date):
                         precipitation_mm=precipitation_mm,
                         fetched_at=datetime.now()
                     )
-                    #db.session.add(forecast_data)
                     add_forecast_data(forecast_data)
 
-            #db.session.commit()
             commit_changes()
             print(datetime.now().strftime('%d-%m %H:%M') + " Range forecast fetch successful, data saved.")
 
         else:
             print("Date range not found in the data.")
+
 
 def get_weather_forecast_by_date(date):
     with app.app_context():

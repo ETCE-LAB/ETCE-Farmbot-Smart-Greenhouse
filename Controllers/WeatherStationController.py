@@ -4,17 +4,18 @@ from werkzeug.exceptions import NotFound
 from app import api, db
 from farmbot_commands.manage_farmbot import move_to
 from DataLayer.Models.models import WeatherStationData, WeatherForecastData, WaterManagementData
-from DataLayer.Models.api_models import weather_station_model, weather_forecast_model, water_management_model  # , sensor_data_model
+from DataLayer.Models.api_models import weather_station_model, weather_forecast_model, \
+    water_management_model  # , sensor_data_model
 from flask_restx import Resource, Namespace
 from Services.WeatherStationService import fetch_and_process_data
 from datetime import datetime
-
 
 station_ns = Namespace('station', description='Endpoints for the Weather Station')
 water_ns = Namespace('water', description='Endpoints for Water management')
 sensor_ns = Namespace('sensor', description='Endpoints for Sensor data')
 sequence_ns = Namespace('sequence', description='Endpoints for managing sequences')
 farmbot_ns = Namespace('farmbot', description='Endpoints for FarmBot')
+
 
 @station_ns.route('/data')
 class Data(Resource):
@@ -28,6 +29,7 @@ class Data(Resource):
         except Exception as e:
             station_ns.abort(500, f"Internal server error: {str(e)}")
 
+
 @station_ns.route('/fetch')
 class Fetch(Resource):
     def get(self):
@@ -36,6 +38,7 @@ class Fetch(Resource):
             return {'status': result['message']}, result['code']
         except Exception as e:
             station_ns.abort(500, f"Internal server error: {str(e)}")
+
 
 @water_ns.route('/volume')
 class Water(Resource):
@@ -48,6 +51,7 @@ class Water(Resource):
             return data, 200
         except Exception as e:
             water_ns.abort(500, f"Internal server error: {str(e)}")
+
 
 @farmbot_ns.route('/move/<float:x>/<float:y>/<float:z>')
 class Move(Resource):
@@ -62,6 +66,7 @@ class Move(Resource):
             }, 200
         except Exception as e:
             farmbot_ns.abort(500, f"Error moving FarmBot: {str(e)}")
+
 
 '''
 @sensor_ns.route('/data')

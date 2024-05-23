@@ -1,5 +1,5 @@
 from app import app, db
-from Scheduler.WeatherPredictionScheduler import scheduler
+# from Scheduler.WeatherPredictionScheduler import scheduler
 from Scheduler.WeatherStationScheduler import scheduler
 
 

@@ -5,7 +5,8 @@ from DataLayer.Models.models import WeatherStationData, WeatherForecastData
 import json
 from datetime import datetime
 from flask import jsonify
-from DataLayer.WeatherStationRepository import add_weather_data,commit_changes
+from DataLayer.WeatherStationRepository import add_weather_data, commit_changes
+
 
 def fetch_and_process_data():
     with app.app_context():
@@ -22,7 +23,8 @@ def fetch_and_process_data():
             print(error_message)
             print(response.text)
             return {'message': error_message, 'code': response.status_code}
-        
+
+
 def handle_partial_json(text):
     with app.app_context():
         index = text.rfind('{"result"')
@@ -38,8 +40,7 @@ def handle_partial_json(text):
                 received_at=received_at,
                 fetched_at=fetched_at
             )
-            #db.session.add(weather_data)
+            # db.session.add(weather_data)
             add_weather_data(weather_data)
-        #db.session.commit()
+        # db.session.commit()
         commit_changes()
-        
