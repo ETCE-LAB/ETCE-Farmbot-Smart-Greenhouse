@@ -1,13 +1,11 @@
+from datetime import datetime
+
 from flask import abort
+from flask_restx import Resource, Namespace
 from werkzeug.exceptions import NotFound
 
-from app import api, db
-from farmbot_commands.manage_farmbot import move_to
-from DataLayer.Models.models import WeatherStationData, WeatherForecastData, WaterManagementData
-from DataLayer.Models.api_models import weather_station_model, weather_forecast_model, water_management_model  # , sensor_data_model
-from flask_restx import Resource, Namespace
-from Services.WeatherPredictionService import fetch_weather_forecast,fetch_weather_forecast_range
-from datetime import datetime
+from DataLayer.Models.api_models import weather_forecast_model  # , sensor_data_model
+from DataLayer.Models.models import WeatherForecastData
 
 forecast_ns = Namespace('forecast', description='Endpoints for Weather Forecast')
 
