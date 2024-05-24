@@ -7,10 +7,11 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///smart_greenhouse.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
-api = Api(app, version='2.0', title='FarmBot API',
+api = Api(app, version='3.0', title='FarmBot API',
           description='Endpoints for FarmBot, SmartGreenhouse, and Weather Station')
 
-from resources import station_ns, forecast_ns, water_ns, farmbot_ns
+from Controllers.WeatherStationController import station_ns,water_ns,farmbot_ns
+from Controllers.WeatherPredictionController import  forecast_ns
 
 print("Registering namespaces...")
 api.add_namespace(station_ns)

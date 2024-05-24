@@ -1,14 +1,16 @@
 from flask import abort
+from werkzeug.exceptions import NotFound
+
 from app import api, db
 from farmbot_commands.manage_farmbot import move_to
-from models import WeatherStationData, WeatherForecastData, WaterManagementData
-from api_models import weather_station_model, weather_forecast_model, water_management_model  # , sensor_data_model
+from DataLayer.Models.models import WeatherStationData, WeatherForecastData, WaterManagementData
+from DataLayer.Models.api_models import weather_station_model, weather_forecast_model, \
+    water_management_model  # , sensor_data_model
 from flask_restx import Resource, Namespace
-from services import fetch_and_process_data, fetch_weather_forecast_range, fetch_weather_forecast
-
+from Services.WeatherStationService import fetch_and_process_data
+from datetime import datetime
 
 station_ns = Namespace('station', description='Endpoints for the Weather Station')
-forecast_ns = Namespace('forecast', description='Endpoints for Weather Forecast')
 water_ns = Namespace('water', description='Endpoints for Water management')
 sensor_ns = Namespace('sensor', description='Endpoints for Sensor data')
 sequence_ns = Namespace('sequence', description='Endpoints for managing sequences')
@@ -36,38 +38,6 @@ class Fetch(Resource):
             return {'status': result['message']}, result['code']
         except Exception as e:
             station_ns.abort(500, f"Internal server error: {str(e)}")
-
-
-@forecast_ns.route('/get/<date>')
-class Forecast(Resource):
-    @forecast_ns.marshal_with(weather_forecast_model)
-    def get(self, date):
-        try:
-            forecast_data = WeatherForecastData.query.filter_by(date=date).first()
-            if forecast_data:
-                return forecast_data, 200
-            else:
-                result = fetch_weather_forecast(date)
-                if result:
-                    return result, 200
-                else:
-                    abort(404, 'Forecast not available for this date')
-        except Exception as e:
-            forecast_ns.abort(500, f"Internal server error: {str(e)}")
-
-
-@forecast_ns.route('/range/<start_date>/<end_date>')
-class ForecastRange(Resource):
-    @forecast_ns.marshal_list_with(weather_forecast_model)
-    def get(self, start_date, end_date):
-        try:
-            forecast_data = fetch_weather_forecast_range(start_date, end_date)
-            if forecast_data:
-                return forecast_data, 200
-            else:
-                abort(404, 'No data found for the specified range')
-        except Exception as e:
-            forecast_ns.abort(500, f"Internal server error: {str(e)}")
 
 
 @water_ns.route('/volume')
