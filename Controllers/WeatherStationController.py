@@ -1,6 +1,6 @@
 from flask import abort
 from werkzeug.exceptions import NotFound
-from Services.WaterMeasuring import measure_distance
+from Services.WaterMeasuring import measure_distance, calculate_and_store_volume
 from app import api, db
 from farmbot_commands.manage_farmbot import move_to
 from DataLayer.Models.models import WeatherStationData, WeatherForecastData, WaterManagementData
@@ -49,6 +49,17 @@ class Water(Resource):
             if not data:
                 abort(404, 'Data not found')
             return data, 200
+        except Exception as e:
+            water_ns.abort(500, f"Internal server error: {str(e)}")
+
+
+@water_ns.route('/fetch')
+class WaterFetch(Resource):
+    @water_ns.marshal_with(water_management_model)
+    def get(self):
+        try:
+            new_data = calculate_and_store_volume(db, WaterManagementData)
+            return new_data, 200
         except Exception as e:
             water_ns.abort(500, f"Internal server error: {str(e)}")
 
