@@ -58,8 +58,8 @@ class WaterFetch(Resource):
     @water_ns.marshal_with(water_management_model)
     def get(self):
         try:
-            new_data = calculate_and_store_volume(db, WaterManagementData)
-            return new_data, 200
+            calculate_and_store_volume(db, WaterManagementData)
+            return "Volume written to database!", 200
         except Exception as e:
             water_ns.abort(500, f"Internal server error: {str(e)}")
 
