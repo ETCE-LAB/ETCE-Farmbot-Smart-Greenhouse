@@ -38,7 +38,7 @@ def calculate_and_store_volume(db, WaterManagementData):
 
         new_data = WaterManagementData(
             date=datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-            volume=round(volume, 1) / 1000 ,
+            volume=int(round(volume / 1000)),
             fetched_at=datetime.utcnow()
         )
         db.session.add(new_data)

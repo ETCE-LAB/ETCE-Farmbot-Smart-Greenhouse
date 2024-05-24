@@ -30,7 +30,7 @@ class WeatherForecastData(db.Model):
 class WaterManagementData(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.String(120), nullable=False)
-    volume = db.Column(db.Float)
+    volume = db.Column(db.Integer, nullable=True)
     fetched_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
     def __repr__(self):
