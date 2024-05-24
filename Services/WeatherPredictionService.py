@@ -1,12 +1,13 @@
-import requests
-import config
-from app import db, app
-from DataLayer.Models.models import WeatherStationData, WeatherForecastData
 # import json
 from datetime import datetime
+
+import requests
 from flask import jsonify
 
+import config
+from DataLayer.Models.models import WeatherForecastData
 from DataLayer.WeatherPredictionRepository import add_forecast_data, commit_changes
+from app import app
 
 
 def fetch_weather_forecast(date):
