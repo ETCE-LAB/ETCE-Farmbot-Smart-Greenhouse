@@ -34,7 +34,7 @@ def calculate_and_store_volume(db, WaterManagementData):
         height = 78
         length = 73
         width = 54
-        volume = length * width * (distance - height)
+        volume = length * width * (height - distance)
 
         new_data = WaterManagementData(
             date=datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
