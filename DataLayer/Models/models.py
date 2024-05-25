@@ -37,7 +37,6 @@ class WaterManagementData(db.Model):
         return f"<WaterManagementData {self.volume} {self.date}>"
 
 
-'''
 class SensorData(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     measurement_value = db.Column(db.Float, nullable=False)
@@ -46,4 +45,3 @@ class SensorData(db.Model):
 
     def __repr__(self):
         return f"<SensorData {self.measurement_type} {self.received_at}>"
-'''

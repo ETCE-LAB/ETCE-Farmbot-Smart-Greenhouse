@@ -1,10 +1,12 @@
 from flask import abort
 from flask_restx import Resource, Namespace
 
-from DataLayer.Models.api_models import weather_station_model, water_management_model  # , sensor_data_model
-from DataLayer.Models.models import WeatherStationData, WaterManagementData
+from DataLayer.Models.api_models import weather_station_model, water_management_model, \
+    sensor_data_model  # , sensor_data_model
+from DataLayer.Models.models import WeatherStationData, WaterManagementData, SensorData
 from Services.WeatherStationService import fetch_and_process_data
-from farmbot_commands.manage_farmbot import move_to
+from farmbot_commands.measure_soil import execute_measurement_sequence
+from farmbot_commands.move_farmbot import move_to
 
 station_ns = Namespace('station', description='Endpoints for the Weather Station')
 water_ns = Namespace('water', description='Endpoints for Water management')
@@ -64,15 +66,22 @@ class Move(Resource):
             farmbot_ns.abort(500, f"Error moving FarmBot: {str(e)}")
 
 
-'''
+@farmbot_ns.route('measureSoil')
+class MeasureSoil(Resource):
+    def get(self):
+        try:
+            execute_measurement_sequence()
+            return {'status': 'Measurement sequence initiated successfully.'}, 200
+        except Exception as e:
+            farmbot_ns.abort(500, f"Error executing sequence: {str(e)}")
+
+
 @sensor_ns.route('/data')
-class SensorData(Resource):
+class SensorDataResource(Resource):
     @sensor_ns.marshal_list_with(sensor_data_model)
     def get(self):
         data = SensorData.query.all()
         if data:
-            return [{'measurement_value': item.measurement_value, 'measurement_type': item.measurement_type,
-                     'received_at': item.received_at} for item in data], 200
+            return data, 200
         else:
-            api.abort(404, 'Data not found')
-'''
+            sensor_ns.abort(404, 'Data not found')
