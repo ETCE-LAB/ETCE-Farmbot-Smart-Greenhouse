@@ -5,7 +5,7 @@ from DataLayer.Models.api_models import weather_station_model, water_management_
     sensor_data_model  # , sensor_data_model
 from DataLayer.Models.models import WeatherStationData, WaterManagementData, SensorData
 from Services.WeatherStationService import fetch_and_process_data
-from farmbot_commands.measure_soil import execute_measurement_sequence
+from farmbot_commands.measure_soil_sequence import execute_measurement_sequence
 from farmbot_commands.move_farmbot import move_to
 
 station_ns = Namespace('station', description='Endpoints for the Weather Station')

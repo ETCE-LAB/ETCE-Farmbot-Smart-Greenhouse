@@ -56,10 +56,10 @@ class SensorOperationsHandler:
             print("Sensor returned to storage. Operations completed.")
             bot.disconnect()
 
-    def perform_measurement(self, bot, xyz):
+    def perform_measurement(self, bot, xyz):  # TODO: Add sensor reading logic
         with app.app_context():
             measurement = SensorData(
-                measurement_value=42,  # Simulated sensor value
+                measurement_value=42,  # Simulated sensor value for testing db storage
                 measurement_type="Soil Moisture",
                 received_at=datetime.now().strftime('%Y-%m-%d %H:%M:%S')
             )
@@ -83,10 +83,10 @@ class SensorOperationsHandler:
 
 # Define sensor pickup adjustments and measurement points
 pre_pickup_position = (100, 100, 10)  # Safe Z position before picking up the sensor
-sensor_pickup_position = (100, 100, 0)
+sensor_pickup_position = (100, 100, 0)  # Sensor pickup position
 post_pickup_position = (110, 100, 0)  # Slight X adjustment after pickup
 pre_store_position = (90, 100, 0)  # Slight X adjustment before storing
-sensor_store_position = (100, 100, 0)  # Final storage position
+sensor_store_position = (100, 100, 0)  # Sensor storage position
 measurement_points = [(200, 200, -10), (300, 300, -10), (400, 400, -10), (500, 500, -10)]
 
 
@@ -96,4 +96,3 @@ def execute_measurement_sequence():
     handler = SensorOperationsHandler(sensor_pickup_position, pre_pickup_position, post_pickup_position,
                                       measurement_points, pre_store_position, sensor_store_position)
     fb.connect(handler)
-
