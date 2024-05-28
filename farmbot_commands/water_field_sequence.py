@@ -3,7 +3,7 @@ import config
 from urllib.error import HTTPError
 
 
-# TODO: Add pin to config and set correct position for nozzle pickup
+# !DONE! TODO: Add pin to config and set correct position for nozzle pickup 
 def get_farmbot_token(email, password, url):
     try:
         raw_token = FarmbotToken.download_token(email, password, url)
@@ -19,7 +19,9 @@ class WateringOperationsHandler:
         self.nozzle_pickup = nozzle_pickup
         self.is_watering = False
         self.current_x = 200
-        self.direction = 1  # 1 for y=1200, -1 for y=0 TODO: set maximum y value
+        self.direction = 1  # 1 for y=1200, -1 for y=0 . !DONE! TODO: set maximum y value
+        self.x_maxValue = 3000
+        self.y_maxValue = 1228
 
     def on_connect(self, bot, mqtt_client):
         bot.move_absolute(*self.nozzle_pickup)
@@ -34,19 +36,19 @@ class WateringOperationsHandler:
             print("Watering nozzle picked up. Starting watering operations...")
             bot.toggle_pin(pin_number=config.water_valve_pin)
             self.is_watering = True
-            bot.move_absolute(x=self.current_x, y=1200, z=0)
+            bot.move_absolute(x=self.current_x, y=self.y_maxValue, z=0)
 
         # Perform the S pattern watering
         elif self.is_watering:
-            if self.direction == 1 and xyz[1] == 1200:
+            if self.direction == 1 and xyz[1] == self.y_maxValue:
                 bot.toggle_pin(pin_number=config.water_valve_pin)  # Turn off water
                 self.current_x += 200
                 self.direction = -1
-                if self.current_x > 1000:  # Check if the current_x exceeds field width TODO: set maximum x value
+                if self.current_x > self.x_maxValue:  # Check if the current_x exceeds field width . !DONE! TODO: set maximum x value
                     bot.move_absolute(*self.nozzle_pickup)  # Return to nozzle pickup position
                     self.is_watering = False
                 else:
-                    bot.move_absolute(x=self.current_x, y=1200, z=0)
+                    bot.move_absolute(x=self.current_x, y=self.y_maxValue, z=0)
                     bot.toggle_pin(pin_number=config.water_valve_pin)  # Turn on water
                     bot.move_absolute(x=self.current_x, y=0, z=0)
 
@@ -54,13 +56,17 @@ class WateringOperationsHandler:
                 bot.toggle_pin(pin_number=config.water_valve_pin)  # Turn off water
                 self.current_x += 200
                 self.direction = 1
-                if self.current_x > 1000:  # Check if the current_x exceeds field width TODO: set maximum x value
+                if self.current_x > self.x_maxValue:  # Check if the current_x exceeds field width. !DONE! TODO: set maximum x value
                     bot.move_absolute(*self.nozzle_pickup)  # Return to nozzle pickup position
                     self.is_watering = False
                 else:
                     bot.move_absolute(x=self.current_x, y=0, z=0)
                     bot.toggle_pin(pin_number=config.water_valve_pin)
-                    bot.move_absolute(x=self.current_x, y=1200, z=0)
+                    bot.move_absolute(x=self.current_x, y=self.y_maxValue, z=0)
+
+        if not self.is_watering and xyz == self.nozzle_pickup:
+            print("Watering completed. Returning to home position...") 
+            bot.move_absolute(x=0, y=0, z=0)  # Move to home position
 
     def on_log(self, bot, log):
         print("FarmBot: " + log['message'])
@@ -75,5 +81,16 @@ class WateringOperationsHandler:
 def execute_watering_sequence():
     token = get_farmbot_token(config.farmbot_email, config.farmbot_password, config.farmbot_url)
     fb = Farmbot(token)
-    handler = WateringOperationsHandler(nozzle_pickup=(0, 0, 0))  # TODO: Define the correct nozzle pickup position
+    handler = WateringOperationsHandler(nozzle_pickup=(9, 1074 ,-410))  # !DONE! TODO: Define the correct nozzle pickup position
     fb.connect(handler)
+
+'''def go_home():
+    def on_connect(self, bot, mqtt_client):
+        #bot.move_absolute(*self.nozzle_pickup)
+        print("Going home ...")
+
+    token = get_farmbot_token(config.farmbot_email, config.farmbot_password,config.farmbot_url)
+    fb = Farmbot(token)
+    #fb.connect(home)
+    home= fb.move_absolute(x= 0 , y = 0 , z=0)
+    fb.connect(home)'''

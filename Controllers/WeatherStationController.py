@@ -7,6 +7,9 @@ from DataLayer.Models.models import WeatherStationData, WaterManagementData, Sen
 from Services.WeatherStationService import fetch_and_process_data
 from farmbot_commands.measure_soil_sequence import execute_measurement_sequence
 from farmbot_commands.move_farmbot import move_to
+from farmbot_commands.water_field_sequence import execute_watering_sequence 
+from farmbot_commands.go_home import go_home
+
 
 station_ns = Namespace('station', description='Endpoints for the Weather Station')
 water_ns = Namespace('water', description='Endpoints for Water management')
@@ -85,3 +88,21 @@ class SensorDataResource(Resource):
             return data, 200
         else:
             sensor_ns.abort(404, 'Data not found')
+
+@farmbot_ns.route('WaterSequence')
+class WaterFieldSequenc(Resource):
+    def get(self):
+        try:
+            execute_watering_sequence()
+            return {'status': 'Water sequence initiated successfully.'}, 200
+        except Exception as e:
+            farmbot_ns.abort(500, f"Error executing sequence: {str(e)}")
+
+@farmbot_ns.route('Go_Home')
+class GOO_HOOME(Resource):
+    def get(self):
+        try:
+            go_home()
+            return {'status': 'Go Home initiated successfully.'}, 200
+        except Exception as e:
+            farmbot_ns.abort(500, f"Error executing sequence: {str(e)}")
