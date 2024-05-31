@@ -1,10 +1,8 @@
 import json
 from datetime import datetime
-
 import requests
-
 import config
-from DataLayer.Models.models import WeatherStationData
+from DataLayer.Models.WeatherStationModel import WeatherStationData
 from DataLayer.WeatherStationRepository import add_weather_data, commit_changes
 from app import app
 
@@ -41,7 +39,5 @@ def handle_partial_json(text):
                 received_at=received_at,
                 fetched_at=fetched_at
             )
-            # db.session.add(weather_data)
             add_weather_data(weather_data)
-        # db.session.commit()
         commit_changes()

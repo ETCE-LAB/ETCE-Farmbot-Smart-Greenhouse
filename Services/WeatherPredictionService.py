@@ -5,7 +5,7 @@ import requests
 from flask import jsonify
 
 import config
-from DataLayer.Models.models import WeatherForecastData
+from DataLayer.Models.WeatherForecastModel import WeatherForecastData
 from DataLayer.WeatherPredictionRepository import add_forecast_data, commit_changes
 from app import app
 

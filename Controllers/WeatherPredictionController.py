@@ -1,11 +1,9 @@
 from datetime import datetime
-
 from flask import abort
 from flask_restx import Resource, Namespace
 from werkzeug.exceptions import NotFound
-
-from DataLayer.Models.api_models import weather_forecast_model  # , sensor_data_model
-from DataLayer.Models.models import WeatherForecastData
+from DataLayer.Models.WeatherForecastModel import WeatherForecastData
+from app import weather_forecast_model
 
 forecast_ns = Namespace('forecast', description='Endpoints for Weather Forecast')
 

@@ -64,5 +64,3 @@ def move_to(x, y, z):
             'y': y,
             'z': z,
         }
-# TODO: Implement function to execute sequence step by step using bot.move_absolute() and bot.toggle_pin()
-# TODO: Use https://github.com/FarmBot/farmbot-py
