@@ -89,7 +89,7 @@ class SensorDataResource(Resource):
         else:
             sensor_ns.abort(404, 'Data not found')
 
-@farmbot_ns.route('WaterSequence')
+@farmbot_ns.route('/waterSequence')
 class WaterFieldSequenc(Resource):
     def get(self):
         try:
@@ -98,7 +98,7 @@ class WaterFieldSequenc(Resource):
         except Exception as e:
             farmbot_ns.abort(500, f"Error executing sequence: {str(e)}")
 
-@farmbot_ns.route('Go_Home')
+@farmbot_ns.route('/go_Home')
 class GOO_HOOME(Resource):
     def get(self):
         try:

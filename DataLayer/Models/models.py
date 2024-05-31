@@ -45,3 +45,4 @@ class SensorData(db.Model):
 
     def __repr__(self):
         return f"<SensorData {self.measurement_type} {self.received_at}>"
+#models zu model seprate
