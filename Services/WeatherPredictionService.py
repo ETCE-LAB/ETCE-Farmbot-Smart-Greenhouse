@@ -1,9 +1,14 @@
+# Services/WeatherPredictionService.py
 from datetime import datetime
 import requests
 import config
-from flask import jsonify
 from DataLayer.Models.WeatherForecastModel import WeatherForecastData
-from DataLayer.WeatherPredictionRepository import add_forecast_data, commit_changes
+from DataLayer.WeatherPredictionRepository import (
+    add_forecast_data,
+    commit_changes,
+    get_forecast_data_by_date,
+    update_forecast_data,
+)
 
 
 class WeatherPredictionService:
@@ -52,12 +57,11 @@ class WeatherPredictionService:
                     sunshine_duration_minutes = int(data['daily']['sunshine_duration'][i] / 60)
                     precipitation_mm = data['daily']['precipitation_sum'][i]
 
-                    forecast_data = WeatherForecastData.query.filter_by(date=date).first()
+                    forecast_data = get_forecast_data_by_date(date)
                     if forecast_data:
-                        forecast_data.max_temperature = max_temperature
-                        forecast_data.min_temperature = min_temperature
-                        forecast_data.sunshine_duration_minutes = sunshine_duration_minutes
-                        forecast_data.precipitation_mm = precipitation_mm
+                        update_forecast_data(
+                            forecast_data, max_temperature, min_temperature, sunshine_duration_minutes, precipitation_mm
+                        )
                     else:
                         forecast_data = WeatherForecastData(
                             date=date,
@@ -83,7 +87,7 @@ class WeatherPredictionService:
     @staticmethod
     def get_weather_forecast_by_date(date):
         try:
-            forecast_data = WeatherForecastData.query.filter_by(date=date).first()
+            forecast_data = get_forecast_data_by_date(date)
             if forecast_data:
                 return {
                     'date': forecast_data.date,

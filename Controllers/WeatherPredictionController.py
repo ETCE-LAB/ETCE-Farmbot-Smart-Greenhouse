@@ -6,7 +6,7 @@ from app import weather_forecast_model
 forecast_ns = Namespace('forecast', description='Endpoints for Weather Forecast')
 
 
-@forecast_ns.route('/get/<date>')
+@forecast_ns.route('/get/<date>')  # get forecast data from database
 class Forecast(Resource):
     @forecast_ns.marshal_with(weather_forecast_model)
     def get(self, date):
@@ -21,7 +21,7 @@ class Forecast(Resource):
             forecast_ns.abort(500, f"Internal server error: {str(e)}")
 
 
-@forecast_ns.route('/fetch/<date>')
+@forecast_ns.route('/fetch/<date>')  # get forecast from API and save to database
 class FetchForecast(Resource):
     def get(self, date):
         try:
@@ -33,7 +33,7 @@ class FetchForecast(Resource):
             forecast_ns.abort(500, f"Internal server error: {str(e)}")
 
 
-@forecast_ns.route('/fetch-range/<start_date>/<end_date>')
+@forecast_ns.route('/fetch-range/<start_date>/<end_date>')  # get forecast from API and save to database for range of dates
 class FetchForecastRange(Resource):
     def get(self, start_date, end_date):
         try:
