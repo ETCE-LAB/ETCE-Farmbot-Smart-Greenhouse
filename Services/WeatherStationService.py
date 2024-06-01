@@ -3,11 +3,11 @@ from datetime import datetime
 import requests
 import config
 from DataLayer.Models.WeatherStationModel import WeatherStationData
-from DataLayer.WeatherStationRepository import add_weather_data, commit_changes
+from DataLayer.WeatherStationRepository import add_weather_data
 from app import app
 
 
-def fetch_and_process_data():
+def fetch_weather_station_data():
     with app.app_context():
         headers = {
             'Authorization': f'Bearer {config.weatherstation_access_key}'
@@ -40,4 +40,4 @@ def handle_partial_json(text):
                 fetched_at=fetched_at
             )
             add_weather_data(weather_data)
-        commit_changes()
+        #commit_changes()
