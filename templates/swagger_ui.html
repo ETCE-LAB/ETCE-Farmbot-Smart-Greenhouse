@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='custom_swagger.css') }}">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/3.52.3/swagger-ui.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/3.52.3/swagger-ui-bundle.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/3.52.3/swagger-ui-standalone-preset.js"></script>
+</head>
+<body>
+    <div id="swagger-ui"></div>
+    <script>
+    window.onload = function() {
+        const ui = SwaggerUIBundle({
+            url: "{{ url_for('static', filename='swagger.json') }}",
+            dom_id: '#swagger-ui',
+            presets: [
+                SwaggerUIBundle.presets.apis,
+                SwaggerUIStandalonePreset
+            ],
+            layout: "StandaloneLayout"
+        })
+        window.ui = ui
+    }
+    </script>
+</body>
+</html>

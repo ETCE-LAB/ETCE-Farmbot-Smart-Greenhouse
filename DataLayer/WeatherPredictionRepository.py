@@ -1,4 +1,3 @@
-# DataLayer/WeatherPredictionRepository.py
 from app import db
 from DataLayer.Models.WeatherPredictionModel import WeatherForecastData
 

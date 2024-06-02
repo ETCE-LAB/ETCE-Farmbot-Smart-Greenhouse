@@ -1,0 +1,442 @@
+{
+    "swagger": "2.0",
+    "basePath": "/",
+    "paths": {
+        "/farmbot/": {
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                },
+                "operationId": "get_farm_bot_resource",
+                "tags": [
+                    "farmbot"
+                ]
+            }
+        },
+        "/farmbot/measureSoil": {
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                },
+                "operationId": "get_measure_soil",
+                "tags": [
+                    "farmbot"
+                ]
+            }
+        },
+        "/farmbot/moveTo/{x}/{y}/{z}": {
+            "parameters": [
+                {
+                    "name": "x",
+                    "in": "path",
+                    "required": true,
+                    "type": "number"
+                },
+                {
+                    "name": "y",
+                    "in": "path",
+                    "required": true,
+                    "type": "number"
+                },
+                {
+                    "name": "z",
+                    "in": "path",
+                    "required": true,
+                    "type": "number"
+                }
+            ],
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                },
+                "operationId": "get_move",
+                "tags": [
+                    "farmbot"
+                ]
+            }
+        },
+        "/farmbot/waterField": {
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                },
+                "operationId": "get_water_field",
+                "tags": [
+                    "farmbot"
+                ]
+            }
+        },
+        "/forecast/fetch-range/{start_date}/{end_date}": {
+            "parameters": [
+                {
+                    "name": "start_date",
+                    "in": "path",
+                    "required": true,
+                    "type": "string"
+                },
+                {
+                    "name": "end_date",
+                    "in": "path",
+                    "required": true,
+                    "type": "string"
+                }
+            ],
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                },
+                "operationId": "get_fetch_forecast_range",
+                "tags": [
+                    "forecast"
+                ]
+            }
+        },
+        "/forecast/fetch/{date}": {
+            "parameters": [
+                {
+                    "name": "date",
+                    "in": "path",
+                    "required": true,
+                    "type": "string"
+                }
+            ],
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                },
+                "operationId": "get_fetch_forecast",
+                "tags": [
+                    "forecast"
+                ]
+            }
+        },
+        "/forecast/get/{date}": {
+            "parameters": [
+                {
+                    "name": "date",
+                    "in": "path",
+                    "required": true,
+                    "type": "string"
+                }
+            ],
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/WeatherForecastData"
+                        }
+                    }
+                },
+                "operationId": "get_forecast",
+                "parameters": [
+                    {
+                        "name": "X-Fields",
+                        "in": "header",
+                        "type": "string",
+                        "format": "mask",
+                        "description": "An optional fields mask"
+                    }
+                ],
+                "tags": [
+                    "forecast"
+                ]
+            }
+        },
+        "/station/data/all": {
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/WeatherStationData"
+                            }
+                        }
+                    }
+                },
+                "operationId": "get_data",
+                "parameters": [
+                    {
+                        "name": "X-Fields",
+                        "in": "header",
+                        "type": "string",
+                        "format": "mask",
+                        "description": "An optional fields mask"
+                    }
+                ],
+                "tags": [
+                    "station"
+                ]
+            }
+        },
+        "/station/data/{date}": {
+            "parameters": [
+                {
+                    "name": "date",
+                    "in": "path",
+                    "required": true,
+                    "type": "string"
+                }
+            ],
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/WeatherStationData"
+                            }
+                        }
+                    }
+                },
+                "operationId": "get_data_by_date",
+                "parameters": [
+                    {
+                        "name": "X-Fields",
+                        "in": "header",
+                        "type": "string",
+                        "format": "mask",
+                        "description": "An optional fields mask"
+                    }
+                ],
+                "tags": [
+                    "station"
+                ]
+            }
+        },
+        "/station/fetch": {
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                },
+                "operationId": "get_fetch",
+                "tags": [
+                    "station"
+                ]
+            }
+        },
+        "/water/volume/all": {
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/WaterManagementData"
+                            }
+                        }
+                    }
+                },
+                "operationId": "get_water",
+                "parameters": [
+                    {
+                        "name": "X-Fields",
+                        "in": "header",
+                        "type": "string",
+                        "format": "mask",
+                        "description": "An optional fields mask"
+                    }
+                ],
+                "tags": [
+                    "water"
+                ]
+            }
+        },
+        "/water/volume/last": {
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/WaterManagementData"
+                        }
+                    }
+                },
+                "operationId": "get_water",
+                "parameters": [
+                    {
+                        "name": "X-Fields",
+                        "in": "header",
+                        "type": "string",
+                        "format": "mask",
+                        "description": "An optional fields mask"
+                    }
+                ],
+                "tags": [
+                    "water"
+                ]
+            }
+        },
+        "/water/volume/{date}": {
+            "parameters": [
+                {
+                    "name": "date",
+                    "in": "path",
+                    "required": true,
+                    "type": "string"
+                }
+            ],
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/WaterManagementData"
+                            }
+                        }
+                    }
+                },
+                "operationId": "get_water",
+                "parameters": [
+                    {
+                        "name": "X-Fields",
+                        "in": "header",
+                        "type": "string",
+                        "format": "mask",
+                        "description": "An optional fields mask"
+                    }
+                ],
+                "tags": [
+                    "water"
+                ]
+            }
+        }
+    },
+    "info": {
+        "title": "FarmBot API",
+        "version": "3.0",
+        "description": "Endpoints for the Smart Greenhouse System by ETCE-LAB"
+    },
+    "produces": [
+        "application/json"
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "tags": [
+        {
+            "name": "station",
+            "description": "Endpoints for the Weather Station"
+        },
+        {
+            "name": "forecast",
+            "description": "Endpoints for Weather Forecast"
+        },
+        {
+            "name": "water",
+            "description": "Endpoints for Water management"
+        },
+        {
+            "name": "farmbot",
+            "description": "Endpoints for FarmBot"
+        }
+    ],
+    "definitions": {
+        "WeatherStationData": {
+            "required": [
+                "measurement_type",
+                "measurement_value",
+                "received_at"
+            ],
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "description": "The unique identifier of the measurement"
+                },
+                "measurement_value": {
+                    "type": "number",
+                    "description": "Value of the measurement"
+                },
+                "measurement_type": {
+                    "type": "string",
+                    "description": "Type of the measurement"
+                },
+                "received_at": {
+                    "type": "string",
+                    "description": "ISO date string when the measurement was received"
+                }
+            },
+            "type": "object"
+        },
+        "WeatherForecastData": {
+            "required": [
+                "date"
+            ],
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "description": "The unique identifier of the forecast"
+                },
+                "date": {
+                    "type": "string",
+                    "description": "The date of the forecast"
+                },
+                "max_temperature": {
+                    "type": "number",
+                    "description": "The maximum temperature of the day"
+                },
+                "min_temperature": {
+                    "type": "number",
+                    "description": "The minimum temperature of the day"
+                },
+                "sunshine_duration_minutes": {
+                    "type": "integer",
+                    "description": "The duration of sunshine in minutes"
+                },
+                "precipitation_mm": {
+                    "type": "number",
+                    "description": "The amount of precipitation over the day in mm. 1mm = 1l/m\u00b2"
+                }
+            },
+            "type": "object"
+        },
+        "WaterManagementData": {
+            "required": [
+                "date"
+            ],
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "description": "The unique identifier of the measurement"
+                },
+                "date": {
+                    "type": "string",
+                    "description": "The date of the reading"
+                },
+                "volume": {
+                    "type": "number",
+                    "description": "The stored volume of water in liters"
+                }
+            },
+            "type": "object"
+        }
+    },
+    "responses": {
+        "ParseError": {
+            "description": "When a mask can't be parsed"
+        },
+        "MaskError": {
+            "description": "When any error occurs on mask"
+        }
+    }
+}

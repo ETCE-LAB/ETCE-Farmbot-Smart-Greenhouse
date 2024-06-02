@@ -3,7 +3,7 @@ from datetime import datetime
 import requests
 import config
 from DataLayer.Models.WeatherStationModel import WeatherStationData
-from DataLayer.WeatherStationRepository import add_weather_data
+from DataLayer.WeatherStationRepository import add_weather_data, get_weather_data_by_date
 from app import app
 
 
@@ -40,4 +40,17 @@ def handle_partial_json(text):
                 fetched_at=fetched_at
             )
             add_weather_data(weather_data)
-        #commit_changes()
+
+
+def fetch_weather_data_by_date(date_str):
+    try:
+        input_date = datetime.fromisoformat(date_str.replace('Z', '+00:00'))
+        data = get_weather_data_by_date(input_date)
+        if not data:
+            return None, f'No data found for date {date_str}'
+        return data, None
+    except ValueError:
+        return None, f'Invalid date format: {date_str}'
+    except Exception as e:
+        print(f"Error fetching weather data: {str(e)}")
+        return None, f"Internal server error: {str(e)}"

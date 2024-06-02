@@ -62,7 +62,8 @@ class WeatherPredictionService:
                         forecast_data = get_forecast_data_by_date(date)
                         if forecast_data:
                             update_forecast_data(
-                                forecast_data, max_temperature, min_temperature, sunshine_duration_minutes, precipitation_mm
+                                forecast_data, max_temperature, min_temperature, sunshine_duration_minutes,
+                                precipitation_mm
                             )
                         else:
                             forecast_data = WeatherForecastData(

@@ -15,7 +15,7 @@ def create_models(api):
         'max_temperature': fields.Float(description='The maximum temperature of the day'),
         'min_temperature': fields.Float(description='The minimum temperature of the day'),
         'sunshine_duration_minutes': fields.Integer(description='The duration of sunshine in minutes'),
-        'precipitation_mm': fields.Float(description='The amount of precipitation in mm. 1mm = 1l/m²')
+        'precipitation_mm': fields.Float(description='The amount of precipitation over the day in mm. 1mm = 1l/m²')
     })
 
     water_management_model = api.model('WaterManagementData', {
