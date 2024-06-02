@@ -2,7 +2,7 @@ from flask import Flask
 from flask_restx import Api
 from flask_sqlalchemy import SQLAlchemy
 
-from DataLayer.Models.api_models import create_models
+from DataLayer.Models.ApiSchemas import create_models
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///smart_greenhouse.db'

@@ -1,5 +1,6 @@
 import time
 from datetime import datetime
+from DataLayer.WaterManagementRepository import add_water_data
 
 
 def is_raspberry_pi():
@@ -45,9 +46,9 @@ def measure_distance():
         return distance
 
 
-def calculate_and_store_volume(db, water_management_data):
+def calculate_and_store_volume():
     if not is_raspberry_pi():
-        print("Not running on a Raspberry Pi. Exiting calculate_and_store_volume.")
+        print(datetime.now().strftime('%d-%m %H:%M') + " Not running on a Raspberry Pi, cant measure water volume.")
         return
     else:
         try:
@@ -60,15 +61,9 @@ def calculate_and_store_volume(db, water_management_data):
             width = 54
             volume = (height - distance) * length * width
 
-            new_data = water_management_data(
-                date=datetime.now().strftime("%Y-%m-%d %H:%M"),
-                volume=int(round(volume / 1000)),
-                fetched_at=datetime.utcnow()
-            )
-            db.session.add(new_data)
-            db.session.commit()
-            print("Data stored in database")
+            add_water_data(volume)
+            print(datetime.now().strftime('%d-%m %H:%M') + " Water measurement successful, data saved.")
         except Exception as e:
-            print(f"Error storing data: {str(e)}")
+            print(f"Error storing volume data: {str(e)}")
         finally:
             GPIO.cleanup()

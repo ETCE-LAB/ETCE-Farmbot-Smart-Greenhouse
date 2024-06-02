@@ -2,7 +2,7 @@ from app import db
 
 
 class WeatherForecastData(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     date = db.Column(db.String(120), nullable=False)
     max_temperature = db.Column(db.Float)
     min_temperature = db.Column(db.Float)

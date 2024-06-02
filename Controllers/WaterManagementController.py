@@ -1,7 +1,6 @@
 from flask import abort
 from flask_restx import Resource, Namespace
-
-from DataLayer.Models.WaterManagementModel import WaterManagementData
+from DataLayer.WaterManagementRepository import get_all_water_data
 from app import water_management_model
 
 water_ns = Namespace('water', description='Endpoints for Water management')
@@ -12,7 +11,7 @@ class Water(Resource):
     @water_ns.marshal_list_with(water_management_model)
     def get(self):
         try:
-            data = WaterManagementData.query.all()
+            data = get_all_water_data()
             if not data:
                 abort(404, 'Data not found')
             return data, 200

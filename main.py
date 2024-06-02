@@ -1,5 +1,5 @@
 from app import app, db
-from Scheduler.WaterMonitorScheduler import scheduler_service as water_monitor_scheduler_service
+from Scheduler.WaterManagementScheduler import scheduler_service as water_monitor_scheduler_service
 from Scheduler.WeatherStationScheduler import scheduler_service as weather_station_scheduler_service
 from Scheduler.WeatherPredictionScheduler import scheduler_service as weather_prediction_scheduler_service
 

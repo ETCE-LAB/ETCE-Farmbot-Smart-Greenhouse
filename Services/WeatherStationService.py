@@ -14,7 +14,7 @@ def fetch_weather_station_data():
         }
         response = requests.get(config.weatherstation_device_url, headers=headers)
         if response.status_code == 200:
-            print(datetime.now().strftime('%d-%m %H:%M') + " Station fetch successful, saving...")
+            print(datetime.now().strftime('%d-%m %H:%M') + " Station fetch successful, data saved.")
             handle_partial_json(response.text)
             return {'message': "Data fetched and saved successfully", 'code': 200}
         else:
