@@ -1,34 +1,45 @@
 from flask import abort
-from werkzeug.exceptions import NotFound
-
-from app import api, db
-from farmbot_commands.manage_farmbot import move_to
-from DataLayer.Models.models import WeatherStationData, WeatherForecastData, WaterManagementData
-from DataLayer.Models.api_models import weather_station_model, weather_forecast_model, water_management_model  # , sensor_data_model
 from flask_restx import Resource, Namespace
-from Services.WeatherPredictionService import fetch_weather_forecast,fetch_weather_forecast_range
-from datetime import datetime
+from Services.WeatherPredictionService import WeatherPredictionService
+from app import weather_forecast_model
 
 forecast_ns = Namespace('forecast', description='Endpoints for Weather Forecast')
 
 
-@forecast_ns.route('/get/<date>')
+@forecast_ns.route('/get/<date>')  # get forecast data from database
 class Forecast(Resource):
     @forecast_ns.marshal_with(weather_forecast_model)
     def get(self, date):
         try:
-            try:
-                valid_date = datetime.strptime(date, "%Y-%m-%d").date()
-            except ValueError:
-                abort(400, "Invalid date format. Please use YYYY-MM-DD format.")
-
-            forecast_data = WeatherForecastData.query.filter_by(date=valid_date).first()
-            if forecast_data:
-                return forecast_data, 200
-            else:
-                abort(404, 'Forecast not available for this date')
-        except NotFound as e:
-            forecast_ns.abort(404, str(e))
+            forecast_data, status_code = WeatherPredictionService.get_weather_forecast_by_date(date)
+            if status_code == 404:
+                abort(404, forecast_data['error'])
+            elif status_code == 500:
+                abort(500, forecast_data['error'])
+            return forecast_data, 200
         except Exception as e:
             forecast_ns.abort(500, f"Internal server error: {str(e)}")
 
+
+@forecast_ns.route('/fetch/<date>')  # get forecast from API and save to database
+class FetchForecast(Resource):
+    def get(self, date):
+        try:
+            result = WeatherPredictionService.fetch_weather_forecast(date)
+            if result['code'] == 500:
+                abort(500, result['message'])
+            return {'status': result['message']}, result['code']
+        except Exception as e:
+            forecast_ns.abort(500, f"Internal server error: {str(e)}")
+
+
+@forecast_ns.route('/fetch-range/<start_date>/<end_date>')  # get forecast from API and save to database for range of dates
+class FetchForecastRange(Resource):
+    def get(self, start_date, end_date):
+        try:
+            result = WeatherPredictionService.fetch_weather_forecast_range(start_date, end_date)
+            if result['code'] == 500:
+                abort(500, result['message'])
+            return {'status': result['message']}, result['code']
+        except Exception as e:
+            forecast_ns.abort(500, f"Internal server error: {str(e)}")

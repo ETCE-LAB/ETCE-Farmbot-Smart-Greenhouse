@@ -1,21 +1,20 @@
-import requests
-import config
-from app import db, app
-from DataLayer.Models.models import WeatherStationData, WeatherForecastData
 import json
 from datetime import datetime
-from flask import jsonify
-from DataLayer.WeatherStationRepository import add_weather_data, commit_changes
+import requests
+import config
+from DataLayer.Models.WeatherStationModel import WeatherStationData
+from DataLayer.WeatherStationRepository import add_weather_data, get_weather_data_by_date
+from app import app
 
 
-def fetch_and_process_data():
+def fetch_weather_station_data():
     with app.app_context():
         headers = {
             'Authorization': f'Bearer {config.weatherstation_access_key}'
         }
         response = requests.get(config.weatherstation_device_url, headers=headers)
         if response.status_code == 200:
-            print(datetime.now().strftime('%d-%m %H:%M') + " Station fetch successful, saving...")
+            print(datetime.now().strftime('%d-%m %H:%M') + " Station fetch successful, data saved.")
             handle_partial_json(response.text)
             return {'message': "Data fetched and saved successfully", 'code': 200}
         else:
@@ -40,7 +39,18 @@ def handle_partial_json(text):
                 received_at=received_at,
                 fetched_at=fetched_at
             )
-            # db.session.add(weather_data)
             add_weather_data(weather_data)
-        # db.session.commit()
-        commit_changes()
+
+
+def fetch_weather_data_by_date(date_str):
+    try:
+        input_date = datetime.fromisoformat(date_str.replace('Z', '+00:00'))
+        data = get_weather_data_by_date(input_date)
+        if not data:
+            return None, f'No data found for date {date_str}'
+        return data, None
+    except ValueError:
+        return None, f'Invalid date format: {date_str}'
+    except Exception as e:
+        print(f"Error fetching weather data: {str(e)}")
+        return None, f"Internal server error: {str(e)}"

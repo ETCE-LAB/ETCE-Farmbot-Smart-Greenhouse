@@ -1,30 +1,41 @@
-from flask import Flask
+from flask import Flask, render_template
 from flask_restx import Api
 from flask_sqlalchemy import SQLAlchemy
 
-app = Flask(__name__)
+from DataLayer.Models.ApiSchemas import create_models
+
+app = Flask(__name__, template_folder='templates', static_folder='static')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///smart_greenhouse.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
-api = Api(app, version='3.0', title='FarmBot API',
-          description='Endpoints for FarmBot, SmartGreenhouse, and Weather Station')
+api = Api(app, version='3.0', title='API',
+          description='Endpoints for the Smart Greenhouse System by ETCE-LAB',
+          doc='/swagger')
 
-from Controllers.WeatherStationController import station_ns,water_ns,farmbot_ns
-from Controllers.WeatherPredictionController import  forecast_ns
 
-print("Registering namespaces...")
-api.add_namespace(station_ns)
-api.add_namespace(forecast_ns)
-api.add_namespace(water_ns)
-api.add_namespace(farmbot_ns)
-print("Namespaces registered.")
+@api.documentation
+def custom_ui():
+    return render_template('swagger_ui.html')
 
-'''
-api.add_namespace(sequence_ns)
-api.add_namespace(sensor_ns)
-'''
 
-if __name__ == "__main__":
-    print("Starting Flask app...")
-    app.run(debug=True)
+# Initialize models
+weather_station_model, weather_forecast_model, water_management_model = create_models(api)
+
+
+# Register namespaces
+def register_namespaces():
+    from Controllers.FarmBotController import farmbot_ns
+    from Controllers.WaterManagementController import water_ns
+    from Controllers.WeatherStationController import station_ns
+    from Controllers.WeatherPredictionController import forecast_ns
+
+    print("Registering namespaces...")
+    api.add_namespace(station_ns)
+    api.add_namespace(forecast_ns)
+    api.add_namespace(water_ns)
+    api.add_namespace(farmbot_ns)
+    print("Namespaces registered.")
+
+
+register_namespaces()
