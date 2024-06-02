@@ -1,9 +1,14 @@
-"""
-from apscheduler.schedulers.background import BackgroundScheduler
-from Services.WeatherPredictionService import fetch_weather_forecast_range
+from Scheduler.SchedulerClass import SchedulerService
+from Services.WeatherPredictionService import WeatherPredictionService
 import datetime
 
-scheduler = BackgroundScheduler()
+scheduler_service = SchedulerService()
 
-scheduler.add_job(fetch_weather_forecast_range, 'interval', seconds=10, args=[(datetime.datetime.now()).strftime('%Y-%m-%d'), (datetime.datetime.now() + datetime.timedelta(days=15)).strftime('%Y-%m-%d')])
-"""
+start_date = datetime.datetime.now().strftime('%Y-%m-%d')  # today
+end_date = (datetime.datetime.now() + datetime.timedelta(days=15)).strftime('%Y-%m-%d')  # today + 15 days
+scheduler_service.add_job(
+    WeatherPredictionService.fetch_weather_forecast_range,
+    'interval',
+    hours=8,  # run 3 times a day
+    args=[start_date, end_date]
+)

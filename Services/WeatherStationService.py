@@ -1,22 +1,20 @@
 import json
 from datetime import datetime
-
 import requests
-
 import config
-from DataLayer.Models.models import WeatherStationData
-from DataLayer.WeatherStationRepository import add_weather_data, commit_changes
+from DataLayer.Models.WeatherStationModel import WeatherStationData
+from DataLayer.WeatherStationRepository import add_weather_data
 from app import app
 
 
-def fetch_and_process_data():
+def fetch_weather_station_data():
     with app.app_context():
         headers = {
             'Authorization': f'Bearer {config.weatherstation_access_key}'
         }
         response = requests.get(config.weatherstation_device_url, headers=headers)
         if response.status_code == 200:
-            print(datetime.now().strftime('%d-%m %H:%M') + " Station fetch successful, saving...")
+            print(datetime.now().strftime('%d-%m %H:%M') + " Station fetch successful, data saved.")
             handle_partial_json(response.text)
             return {'message': "Data fetched and saved successfully", 'code': 200}
         else:
@@ -41,7 +39,5 @@ def handle_partial_json(text):
                 received_at=received_at,
                 fetched_at=fetched_at
             )
-            # db.session.add(weather_data)
             add_weather_data(weather_data)
-        # db.session.commit()
-        commit_changes()
+        #commit_changes()
