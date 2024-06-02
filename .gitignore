@@ -241,8 +241,3 @@ pyrightconfig.json
 # Config file
 config.py
 
-# Custom additions
-static/custom_swagger.css
-static/swagger.json
-templates/swagger_ui.html
-

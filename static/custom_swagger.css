@@ -1,0 +1,72 @@
+body {
+    background-color: #f4f6f9;
+    font-family: 'Roboto', sans-serif;
+}
+
+.swagger-ui .topbar {
+    background-color: #1f2e3d;
+    border-bottom: 3px solid #17a2b8;
+}
+
+.swagger-ui .topbar a {
+    color: #ffffff;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.swagger-ui .version {
+    color: #ffffff;
+    padding: 3px 10px;
+    border-radius: 3px;
+    margin-left: 10px;
+}
+
+.swagger-ui .info {
+    color: #ffffff;
+    background-color: #ecf0f1;
+    padding: 20px;
+    border-radius: 4px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+}
+
+.swagger-ui .scheme-container {
+    background-color: #ecf0f1;
+    border-radius: 4px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    padding: 10px;
+    margin-top: 20px;
+}
+
+.swagger-ui .opblock {
+    background-color: #ffffff;
+    border-radius: 4px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    margin-bottom: 20px;
+}
+
+.swagger-ui .opblock-summary {
+    background-color: #ffffff;
+    color: #ffffff;
+    border-radius: 4px 4px 0 0;
+}
+
+.swagger-ui .opblock-description-wrapper {
+    background-color: #ecf0f1;
+    padding: 15px;
+}
+
+.swagger-ui .btn {
+    background-color: #17a2b8;
+    color: #ffffff;
+}
+
+.swagger-ui .btn:hover {
+    background-color: #138496;
+    color: #ffffff;
+}
+
+.swagger-ui .response-col_description__inner {
+    background-color: #ecf0f1;
+    padding: 10px;
+    border-radius: 4px;
+}
