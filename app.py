@@ -4,12 +4,12 @@ from flask_sqlalchemy import SQLAlchemy
 
 from DataLayer.Models.ApiSchemas import create_models
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='templates', static_folder='static')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///smart_greenhouse.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
-api = Api(app, version='3.0', title='FarmBot API',
+api = Api(app, version='3.0', title='API',
           description='Endpoints for the Smart Greenhouse System by ETCE-LAB',
           doc='/swagger')
 
