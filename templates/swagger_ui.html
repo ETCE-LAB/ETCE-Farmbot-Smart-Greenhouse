@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>FarmBot API Documentation</title>
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='custom_swagger.css') }}">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/3.52.3/swagger-ui.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/3.52.3/swagger-ui-bundle.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/3.52.3/swagger-ui-standalone-preset.js"></script>
+    <style>
+        .topbar-wrapper img {
+            content: url('https://farm.bot/cdn/shop/files/FarmBot.io_Trimmed_Logo_Gray_on_Transparent_1_1ec606e9-8aed-4af9-ad98-3b14a2fc0602_435x200.png?v=1614326948');
+            width: 150px;
+            height: auto;
+        }
+        .swagger-ui .topbar a span {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="swagger-ui"></div>
+    <script>
+    window.onload = function() {
+        const ui = SwaggerUIBundle({
+            url: "/swagger.json",
+            dom_id: '#swagger-ui',
+            presets: [
+                SwaggerUIBundle.presets.apis,
+                SwaggerUIStandalonePreset
+            ],
+            layout: "StandaloneLayout"
+        });
+        window.ui = ui;
+
+        const logoLink = document.querySelector('.topbar-wrapper a');
+        logoLink.innerHTML = '<img src="https://farm.bot/cdn/shop/files/FarmBot.io_Trimmed_Logo_Gray_on_Transparent_1_1ec606e9-8aed-4af9-ad98-3b14a2fc0602_435x200.png?v=1614326948" alt="FarmBot Logo">';
+    }
+    </script>
+</body>
+</html>
