@@ -10,6 +10,12 @@ def commit_changes():
     db.session.commit()
 
 
+def add_forecasts(forecasts_data):
+    for forecast in forecasts_data:
+        add_forecast_data(forecast)
+    commit_changes()
+
+
 def get_forecast_data_by_date(date):
     return WeatherForecastData.query.filter_by(date=date).first()
 

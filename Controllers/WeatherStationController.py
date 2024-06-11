@@ -1,10 +1,12 @@
 from flask import abort
 from flask_restx import Resource, Namespace
 from DataLayer import WeatherStationRepository
-from Services.WeatherStationService import fetch_weather_station_data, fetch_weather_data_by_date
+from Services.WeatherStationService import WeatherStationService
 from app import weather_station_model
 
 station_ns = Namespace('station', description='Endpoints for the Weather Station')
+
+weather_station_service = WeatherStationService()
 
 
 @station_ns.route('/data/all')
@@ -24,7 +26,7 @@ class Data(Resource):
 class DataByDate(Resource):
     @station_ns.marshal_list_with(weather_station_model)
     def get(self, date):
-        data, error = fetch_weather_data_by_date(date)
+        data, error = weather_station_service.fetch_weather_data_by_date(date)
         if error:
             if 'No data found' in error:
                 abort(404, error)
@@ -37,9 +39,9 @@ class DataByDate(Resource):
 
 @station_ns.route('/fetch')
 class Fetch(Resource):
-    def get(self):
+    def post(self):
         try:
-            result = fetch_weather_station_data()
+            result = weather_station_service.fetch_weather_station_data()
             return {'status': result['message']}, result['code']
         except Exception as e:
             station_ns.abort(500, f"Internal server error: {str(e)}")

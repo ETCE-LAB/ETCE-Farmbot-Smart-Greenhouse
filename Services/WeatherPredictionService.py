@@ -1,7 +1,7 @@
-# Services/WeatherPredictionService.py
 from datetime import datetime
 import requests
 import config
+from DataLayer import WeatherPredictionRepository
 from DataLayer.Models.WeatherPredictionModel import WeatherForecastData
 from DataLayer.WeatherPredictionRepository import (
     add_forecast_data,
@@ -10,16 +10,17 @@ from DataLayer.WeatherPredictionRepository import (
     update_forecast_data,
 )
 from app import app
+from Services.IWeatherPredictionService import IWeatherPredictionService
 
 
-class WeatherPredictionService:
+class WeatherPredictionService(IWeatherPredictionService):
     @staticmethod
     def fetch_weather_forecast(date):
         try:
             response = requests.get(config.weather_forecast_url)
             response.raise_for_status()
             data = response.json()
-
+            forecasts = []
             for i, day in enumerate(data['daily']['time']):
                 if day == date:
                     sunshine_duration_minutes = int(data['daily']['sunshine_duration'][i] / 60)
@@ -31,13 +32,18 @@ class WeatherPredictionService:
                         precipitation_mm=data['daily']['precipitation_sum'][i],
                         fetched_at=datetime.now().strftime('%Y-%m-%d %H:%M:%S')
                     )
-                    add_forecast_data(forecast_data)
-            commit_changes()
-            return {"message": "Forecast fetch successful, data saved.", "code": 200}
+                    forecasts.append(forecast_data)
+            WeatherPredictionRepository.add_forecasts(forecasts)
+            return {"message": "Forecast fetch successful, data saved.", "code": response.status_code}
 
+        except requests.HTTPError as e:
+            print("HTTP Error:", e)
+            return {"message": f"HTTP error occurred: {e}", "code": response.status_code}
         except requests.RequestException as e:
-            return {"message": f"Request failed: {e}", "code": 500}
+            print("Request Exception:", e)
+            return {"message": f"Request exception occurred: {e}", "code": response.status_code}
         except Exception as e:
+            print("General Exception:", e)
             return {"message": f"An error occurred: {e}", "code": 500}
 
     @staticmethod
@@ -78,17 +84,20 @@ class WeatherPredictionService:
 
                     commit_changes()
                     print(datetime.now().strftime('%d-%m %H:%M') + " Range forecast fetch successful, data saved.")
-                    return {"message": "Range forecast fetch successful, data saved.", "code": 200}
+                    return {"message": "Range forecast fetch successful, data saved.", "code": response.status_code}
 
                 else:
                     print("Date range not found in the data.")
                     return {"message": "Date range not found in the data.", "code": 404}
 
+            except requests.HTTPError as e:
+                print("HTTP Error:", e)
+                return {"message": f"HTTP error occurred: {e}", "code": response.status_code}
             except requests.RequestException as e:
-                print(f"Request failed: {e}")
-                return {"message": f"Request failed: {e}", "code": 500}
+                print("Request Exception:", e)
+                return {"message": f"Request exception occurred: {e}", "code": response.status_code}
             except Exception as e:
-                print(f"An error occurred: {e}")
+                print("General Exception:", e)
                 return {"message": f"An error occurred: {e}", "code": 500}
 
     @staticmethod

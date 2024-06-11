@@ -21,11 +21,6 @@ def delete_water_data_by_id(id):
     db.session.commit()
 
 
-def add_water_data(volume):
-    new_data = WaterManagementData(
-        date=datetime.now().strftime("%Y-%m-%d %H:%M"),
-        volume=int(round(volume / 1000)),
-        fetched_at=datetime.utcnow()
-    )
-    db.session.add(new_data)
+def add_water_data(data):
+    db.session.add(data)
     db.session.commit()
