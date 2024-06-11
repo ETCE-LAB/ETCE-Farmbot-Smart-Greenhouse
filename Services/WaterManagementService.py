@@ -1,6 +1,8 @@
 import time
 from datetime import datetime
-from DataLayer.WaterManagementRepository import add_water_data
+from DataLayer import WaterManagementRepository
+from DataLayer.Models.WaterManagementModel import WaterManagementData
+from Services.IWaterManagementService import IWaterManagementService
 
 
 def is_raspberry_pi():
@@ -18,52 +20,54 @@ else:
     GPIO = None  # Define GPIO as None to prevent errors in non-Raspberry Pi environments
 
 
-def measure_distance():
-    if not is_raspberry_pi():
-        print("Not running on a Raspberry Pi. Exiting measure_distance.")
-        return None
-    else:
-        GPIO.setmode(GPIO.BCM)
-        GPIO.setwarnings(False)
-        trigger = 23
-        echo = 24
-        GPIO.setup(trigger, GPIO.OUT)
-        GPIO.setup(echo, GPIO.IN)
-        GPIO.output(trigger, False)
-        print("Waiting For Sensor To Settle")
-        time.sleep(2)
-        GPIO.output(trigger, True)
-        time.sleep(0.00001)
-        GPIO.output(trigger, False)
-        while GPIO.input(echo) == 0:
-            pulse_start = time.time()
-        while GPIO.input(echo) == 1:
-            pulse_end = time.time()
-        pulse_duration = pulse_end - pulse_start
-        distance = pulse_duration * 17150
-        distance = round(distance, 2)
-        print("Distance:", distance, "cm")
-        return distance
+class WaterManagementService(IWaterManagementService):
 
+    def measure_and_store_volume(self):
+        if not is_raspberry_pi():
+            print(datetime.now().strftime('%d-%m %H:%M') + " Not running on a Raspberry Pi, can't measure water volume.")
+            return
+        else:
+            try:
+                # Measure distance
+                GPIO.setmode(GPIO.BCM)
+                GPIO.setwarnings(False)
+                trigger = 23
+                echo = 24
+                GPIO.setup(trigger, GPIO.OUT)
+                GPIO.setup(echo, GPIO.IN)
+                GPIO.output(trigger, False)
+                print("Waiting For Sensor To Settle")
+                time.sleep(2)
+                GPIO.output(trigger, True)
+                time.sleep(0.00001)
+                GPIO.output(trigger, False)
+                while GPIO.input(echo) == 0:
+                    pulse_start = time.time()
+                while GPIO.input(echo) == 1:
+                    pulse_end = time.time()
+                pulse_duration = pulse_end - pulse_start
+                distance = pulse_duration * 17150
+                distance = round(distance, 2)
+                print("Distance:", distance, "cm")
 
-def calculate_and_store_volume():
-    if not is_raspberry_pi():
-        print(datetime.now().strftime('%d-%m %H:%M') + " Not running on a Raspberry Pi, cant measure water volume.")
-        return
-    else:
-        try:
-            distance = measure_distance()
-            if distance is None:
-                return
+                if distance is None:
+                    return
 
-            height = 78
-            length = 73
-            width = 54
-            volume = (height - distance) * length * width
+                # Calculate and store volume
+                height = 78
+                length = 73
+                width = 54
+                volume = (height - distance) * length * width
 
-            add_water_data(volume)
-            print(datetime.now().strftime('%d-%m %H:%M') + " Water measurement successful, data saved.")
-        except Exception as e:
-            print(f"Error storing volume data: {str(e)}")
-        finally:
-            GPIO.cleanup()
+                new_data = WaterManagementData(
+                    date=datetime.now().strftime("%Y-%m-%d %H:%M"),
+                    volume=int(round(volume / 1000)),
+                    fetched_at=datetime.utcnow()
+                )
+
+                WaterManagementRepository.add_water_data(new_data)
+                print(datetime.now().strftime('%d-%m %H:%M') + " Water measurement successful, data saved.")
+            except Exception as e:
+                print(f"Error storing volume data: {str(e)}")
+            finally:
+                GPIO.cleanup()
