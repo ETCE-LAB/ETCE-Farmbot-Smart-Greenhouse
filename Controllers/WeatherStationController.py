@@ -9,7 +9,7 @@ station_ns = Namespace('station', description='Endpoints for the Weather Station
 weather_station_service = WeatherStationService()
 
 
-@station_ns.route('/data/all')
+@station_ns.route('/all')
 class Data(Resource):
     @station_ns.marshal_list_with(weather_station_model)
     def get(self):
@@ -22,7 +22,7 @@ class Data(Resource):
             station_ns.abort(500, f"Internal server error: {str(e)}")
 
 
-@station_ns.route('/data/<string:date>')
+@station_ns.route('/<string:date>')
 class DataByDate(Resource):
     @station_ns.marshal_list_with(weather_station_model)
     def get(self, date):

@@ -33,7 +33,7 @@ class WaterField(Resource):
             farmbot_ns.abort(500, f"Error executing watering sequence: {str(e)}")
 
 
-@farmbot_ns.route('/measureSoil')
+@farmbot_ns.route('/measure/measureSoilMoisture')
 class MeasureSoil(Resource):
     def get(self):
         try:

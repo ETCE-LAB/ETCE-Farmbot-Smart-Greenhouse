@@ -4,7 +4,7 @@ import requests
 import config
 from DataLayer.Models.WeatherStationModel import WeatherStationData
 from DataLayer.WeatherStationRepository import add_weather_data, get_weather_data_by_date
-from Services.IWeatherStationService import IWeatherStationService
+from Services.Interfaces.IWeatherStationService import IWeatherStationService
 from app import app
 
 
