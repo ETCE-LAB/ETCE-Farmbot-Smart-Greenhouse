@@ -62,7 +62,7 @@ class GreenHouseService(IGreenHouseService):
 
     @classmethod
     def get_everything(cls):
-        return GreenHouseRepository.get_everything()
+        return cls.measure_and_store_data()
 
     @classmethod
     def get_all_temperature(cls):
