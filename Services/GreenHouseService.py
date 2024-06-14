@@ -17,18 +17,14 @@ def is_raspberry_pi():
 if is_raspberry_pi():
     import board
     import adafruit_dht
-else:
-    board = None
-    adafruit_dht = None
 
 
 class GreenHouseService(IGreenHouseService):
 
     def __init__(self):
+        self.sensor = None
         if is_raspberry_pi():
             self.sensor = adafruit_dht.DHT22(board.D4)
-        else:
-            self.sensor = None
 
     def measure_and_store_data(self):
         if not self.sensor:
@@ -57,7 +53,8 @@ class GreenHouseService(IGreenHouseService):
             # No need to exit the sensor here, continue trying to read next time
         except Exception as e:
             print(f"Error storing temperature and humidity data: {str(e)}")
-            self.sensor.exit()
+            if self.sensor:
+                self.sensor.exit()
             raise e
 
     @classmethod
@@ -66,7 +63,8 @@ class GreenHouseService(IGreenHouseService):
 
     @classmethod
     def get_everything(cls):
-        return cls.measure_and_store_data()
+        instance = cls()
+        return instance.measure_and_store_data()
 
     @classmethod
     def get_all_temperature(cls):
