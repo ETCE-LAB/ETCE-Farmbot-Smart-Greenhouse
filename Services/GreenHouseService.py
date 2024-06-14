@@ -45,7 +45,6 @@ def measure_and_store_data():
         )
         print(new_data)
 
-        # Store the data in the repository
         GreenHouseRepository.add_greenhouse_data(new_data)
         print(datetime.now().strftime('%d-%m %H:%M') + " Temperature and humidity measurement successful, data saved.")
     except RuntimeError as error:
@@ -53,7 +52,21 @@ def measure_and_store_data():
     except Exception as e:
         print(f"Error storing temperature and humidity data: {str(e)}")
     finally:
-        # Clean up the sensor
         if is_raspberry_pi():
             sensor.exit()
 
+
+def get_all_temperature(cls):
+    return GreenHouseRepository.get_all_temperature()
+
+
+def get_all_humidity(cls):
+    return GreenHouseRepository.get_all_humidity()
+
+
+def get_temperature_by_date(cls, date):
+    return GreenHouseRepository.get_temperature_by_date(date)
+
+
+def get_humidity_by_date(cls, date):
+    return GreenHouseRepository.get_humidity_by_date(date)
