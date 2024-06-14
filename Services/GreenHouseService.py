@@ -53,4 +53,3 @@ class GreenHouseService(IGreenHouseService):
     def get_humidity_by_date(self, date):
         return GreenHouseRepository.get_humidity_by_date(date)
 
-
