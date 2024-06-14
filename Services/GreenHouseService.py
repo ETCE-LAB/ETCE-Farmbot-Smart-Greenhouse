@@ -35,31 +35,22 @@ class GreenHouseService(IGreenHouseService):
             self.sensor.exit()
             raise e
 
-    @classmethod
-    def get_all_humidity(cls):
+    def get_all_humidity(self):
         return GreenHouseRepository.get_all_humidity()
 
-    @classmethod
-    def get_everything(cls):
-        instance = cls()
-        return instance.measure_and_store_data()
-
-    @classmethod
-    def get_all_temperature(cls):
+    def get_all_temperature(self):
         return GreenHouseRepository.get_all_temperature()
 
-    @classmethod
-    def get_last_temperature(cls):
+    def get_last_temperature(self):
         return GreenHouseRepository.get_last_temperature()
 
-    @classmethod
-    def get_last_humidity(cls):
+    def get_last_humidity(self):
         return GreenHouseRepository.get_last_humidity()
 
-    @classmethod
-    def get_temperature_by_date(cls, date):
+    def get_temperature_by_date(self, date):
         return GreenHouseRepository.get_temperature_by_date(date)
 
-    @classmethod
-    def get_humidity_by_date(cls, date):
+    def get_humidity_by_date(self, date):
         return GreenHouseRepository.get_humidity_by_date(date)
+
+
