@@ -24,37 +24,41 @@ else:
 
 class GreenHouseService(IGreenHouseService):
 
+    def __init__(self):
+        if is_raspberry_pi():
+            self.sensor = adafruit_dht.DHT22(board.D4)
+        else:
+            self.sensor = None
+
     def measure_and_store_data(self):
-        sensor = adafruit_dht.DHT22(board.D4)
-        if not is_raspberry_pi():
+        if not self.sensor:
             print(
                 datetime.now().strftime(
                     '%d-%m %H:%M') + " Not running on a Raspberry Pi, can't measure temperature and humidity.")
             return
-        else:
-            try:
-                temperature_c = sensor.temperature
-                humidity = sensor.humidity
-                print("Temp={0:0.1f}ºC, Humidity={1:0.1f}%".format(temperature_c, humidity))
 
-                new_data = GreenHouseData(
-                    date=datetime.now().strftime("%Y-%m-%d %H:%M"),
-                    temperature=temperature_c,
-                    humidity=humidity,
-                    fetched_at=datetime.utcnow()
-                )
-                print(new_data)
-                GreenHouseRepository.add_greenhouse_data(new_data)
-                print(datetime.now().strftime(
-                    '%d-%m %H:%M') + " Temperature and humidity measurement successful, data saved.")
-            except RuntimeError as error:
-                print(error.args[0])
-                sensor.exit()
+        try:
+            temperature_c = self.sensor.temperature
+            humidity = self.sensor.humidity
+            print("Temp={0:0.1f}ºC, Humidity={1:0.1f}%".format(temperature_c, humidity))
 
-            except Exception as e:
-                print(f"Error storing temperature and humidity data: {str(e)}")
-                sensor.exit()
-                raise e
+            new_data = GreenHouseData(
+                date=datetime.now().strftime("%Y-%m-%d %H:%M"),
+                temperature=temperature_c,
+                humidity=humidity,
+                fetched_at=datetime.utcnow()
+            )
+            print(new_data)
+            GreenHouseRepository.add_greenhouse_data(new_data)
+            print(datetime.now().strftime(
+                '%d-%m %H:%M') + " Temperature and humidity measurement successful, data saved.")
+        except RuntimeError as error:
+            print("Runtime error:", error.args[0])
+            # No need to exit the sensor here, continue trying to read next time
+        except Exception as e:
+            print(f"Error storing temperature and humidity data: {str(e)}")
+            self.sensor.exit()
+            raise e
 
     @classmethod
     def get_all_humidity(cls):
@@ -83,3 +87,4 @@ class GreenHouseService(IGreenHouseService):
     @classmethod
     def get_humidity_by_date(cls, date):
         return GreenHouseRepository.get_humidity_by_date(date)
+
