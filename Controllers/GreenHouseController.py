@@ -66,9 +66,17 @@ class All(Resource):
     def post(self):
         try:
             data = GreenHouseService.measure_and_store_data()
-            if not data:
-                return [], 200
-            else:
-                return data, 200
+            return data, 200
+        except Exception as e:
+            greenhouse_ns.abort(500, f"Internal server error: {str(e)}")
+
+
+@greenhouse_ns.route('/all')
+class All(Resource):
+    @greenhouse_ns.marshal_list_with(greenhouse_model)
+    def get(self):
+        try:
+            data = GreenHouseService.get_all_data()
+            return data, 200
         except Exception as e:
             greenhouse_ns.abort(500, f"Internal server error: {str(e)}")

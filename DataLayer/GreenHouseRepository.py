@@ -20,12 +20,12 @@ def get_last_humidity():
     return GreenHouseData.query.order_by(GreenHouseData.id.desc()).first()
 
 
-def get_temperature_by_date(date):
+def get_temperature_by_date(date):  # TODO: fix endpoint returning empty list
     temperature_date = GreenHouseData.query.with_entities(GreenHouseData.temperature).filter_by(date=date).all()
     return [temp.temperature for temp in temperature_date]
 
 
-def get_humidity_by_date(date):
+def get_humidity_by_date(date):  # TODO: fix endpoint returning empty list
     humiditie_date = GreenHouseData.query.with_entities(GreenHouseData.humidity).filter_by(date=date).all()
     return [hum.humidity for hum in humiditie_date]
 

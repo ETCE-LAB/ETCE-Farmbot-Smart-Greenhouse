@@ -69,3 +69,7 @@ def get_temperature_by_date(date):
 
 def get_humidity_by_date(date):
     return GreenHouseRepository.get_humidity_by_date(date)
+
+
+def get_all_data():
+    return GreenHouseRepository.get_everything()
