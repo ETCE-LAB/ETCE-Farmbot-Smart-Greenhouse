@@ -56,17 +56,17 @@ def measure_and_store_data():
             sensor.exit()
 
 
-def get_all_temperature(cls):
+def get_all_temperature():
     return GreenHouseRepository.get_all_temperature()
 
 
-def get_all_humidity(cls):
+def get_all_humidity():
     return GreenHouseRepository.get_all_humidity()
 
 
-def get_temperature_by_date(cls, date):
+def get_temperature_by_date(date):
     return GreenHouseRepository.get_temperature_by_date(date)
 
 
-def get_humidity_by_date(cls, date):
+def get_humidity_by_date(date):
     return GreenHouseRepository.get_humidity_by_date(date)
