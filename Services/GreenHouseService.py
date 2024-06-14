@@ -3,36 +3,17 @@ from datetime import datetime
 from DataLayer import GreenHouseRepository
 from DataLayer.Models.GreenHouseModel import GreenHouseData
 from Services.Interfaces.IGreenHouseService import IGreenHouseService
-
-def is_raspberry_pi():
-    try:
-        with open('/proc/device-tree/model') as f:
-            model = f.read().lower()
-            return 'raspberry pi' in model
-    except Exception:
-        return False
-
-if is_raspberry_pi():
-    import board
-    import adafruit_dht
+import board
+import adafruit_dht
 
 class GreenHouseService(IGreenHouseService):
 
     def __init__(self):
         print("Initializing GreenHouseService")
-        self.sensor = None
-        if is_raspberry_pi():
-            print("Running on Raspberry Pi, initializing sensor")
-            self.sensor = adafruit_dht.DHT22(board.D4)
-        else:
-            print("Not running on Raspberry Pi, sensor not initialized")
+        self.sensor = adafruit_dht.DHT22(board.D4)
 
     def measure_and_store_data(self):
         print("measure_and_store_data called")
-        if self.sensor is None:
-            print(datetime.now().strftime('%d-%m %H:%M') + " Not running on a Raspberry Pi, can't measure temperature and humidity.")
-            return
-
         try:
             temperature_c = self.sensor.temperature
             humidity = self.sensor.humidity
@@ -51,8 +32,7 @@ class GreenHouseService(IGreenHouseService):
             print("Runtime error:", error.args[0])
         except Exception as e:
             print(f"Error storing temperature and humidity data: {str(e)}")
-            if self.sensor:
-                self.sensor.exit()
+            self.sensor.exit()
             raise e
 
     @classmethod
@@ -83,5 +63,3 @@ class GreenHouseService(IGreenHouseService):
     @classmethod
     def get_humidity_by_date(cls, date):
         return GreenHouseRepository.get_humidity_by_date(date)
-
-
