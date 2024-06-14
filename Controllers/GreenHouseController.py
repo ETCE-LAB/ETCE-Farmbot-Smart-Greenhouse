@@ -57,12 +57,11 @@ class Humidity(Resource):
             greenhouse_ns.abort(500, f"Internal server error: {str(e)}")
 #  TODO: add range endpoint
 
-@greenhouse_ns.route('/all')
+@greenhouse_ns.route('/measure')
 class All(Resource):
-    @greenhouse_ns.marshal_list_with(greenhouse_model)
-    def get(self):
+    def post(self):
         try:
-            data = GreenHouseService.get_everything()
+            data = GreenHouseService.GreenHouseService.measure_and_store_data()
             if not data:
                 return [], 200
             return data, 200
