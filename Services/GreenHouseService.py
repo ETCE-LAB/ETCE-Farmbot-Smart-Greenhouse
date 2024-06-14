@@ -4,7 +4,6 @@ from DataLayer import GreenHouseRepository
 from DataLayer.Models.GreenHouseModel import GreenHouseData
 from Services.Interfaces.IGreenHouseService import IGreenHouseService
 
-
 def is_raspberry_pi():
     try:
         with open('/proc/device-tree/model') as f:
@@ -13,24 +12,25 @@ def is_raspberry_pi():
     except Exception:
         return False
 
-
 if is_raspberry_pi():
     import board
     import adafruit_dht
 
-
 class GreenHouseService(IGreenHouseService):
 
     def __init__(self):
+        print("Initializing GreenHouseService")
         self.sensor = None
         if is_raspberry_pi():
+            print("Running on Raspberry Pi, initializing sensor")
             self.sensor = adafruit_dht.DHT22(board.D4)
+        else:
+            print("Not running on Raspberry Pi, sensor not initialized")
 
     def measure_and_store_data(self):
-        if not self.sensor:
-            print(
-                datetime.now().strftime(
-                    '%d-%m %H:%M') + " Not running on a Raspberry Pi, can't measure temperature and humidity.")
+        print("measure_and_store_data called")
+        if self.sensor is None:
+            print(datetime.now().strftime('%d-%m %H:%M') + " Not running on a Raspberry Pi, can't measure temperature and humidity.")
             return
 
         try:
@@ -46,11 +46,9 @@ class GreenHouseService(IGreenHouseService):
             )
             print(new_data)
             GreenHouseRepository.add_greenhouse_data(new_data)
-            print(datetime.now().strftime(
-                '%d-%m %H:%M') + " Temperature and humidity measurement successful, data saved.")
+            print(datetime.now().strftime('%d-%m %H:%M') + " Temperature and humidity measurement successful, data saved.")
         except RuntimeError as error:
             print("Runtime error:", error.args[0])
-            # No need to exit the sensor here, continue trying to read next time
         except Exception as e:
             print(f"Error storing temperature and humidity data: {str(e)}")
             if self.sensor:
@@ -85,4 +83,5 @@ class GreenHouseService(IGreenHouseService):
     @classmethod
     def get_humidity_by_date(cls, date):
         return GreenHouseRepository.get_humidity_by_date(date)
+
 
