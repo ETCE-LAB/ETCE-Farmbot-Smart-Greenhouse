@@ -4,6 +4,7 @@ from DataLayer.Models.WeatherPredictionModel import WeatherForecastData
 
 def add_forecast_data(forecast_data):
     db.session.add(forecast_data)
+    commit_changes()
 
 
 def commit_changes():

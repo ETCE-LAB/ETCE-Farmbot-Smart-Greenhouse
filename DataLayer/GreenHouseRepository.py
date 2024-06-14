@@ -29,3 +29,7 @@ def get_humidity_by_date(date):
 def add_greenhouse_data(data):
     db.session.add(data)
     db.session.commit()
+
+
+def get_everything():
+    return GreenHouseData.query.all()

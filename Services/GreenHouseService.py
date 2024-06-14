@@ -15,11 +15,11 @@ def is_raspberry_pi():
 
 
 if is_raspberry_pi():
-    import RPi.GPIO as GPIO
     import board
     import adafruit_dht
 else:
-    GPIO = None  # Define GPIO as None to prevent errors in non-Raspberry Pi environments
+    board = None
+    adafruit_dht = None
 
 
 class GreenHouseService(IGreenHouseService):
@@ -28,7 +28,8 @@ class GreenHouseService(IGreenHouseService):
         sensor = adafruit_dht.DHT22(board.D4)
         if not is_raspberry_pi():
             print(
-                datetime.now().strftime('%d-%m %H:%M') + " Not running on a Raspberry Pi, can't measure temperature and humidity.")
+                datetime.now().strftime(
+                    '%d-%m %H:%M') + " Not running on a Raspberry Pi, can't measure temperature and humidity.")
             return
         else:
             try:
@@ -42,24 +43,26 @@ class GreenHouseService(IGreenHouseService):
                     humidity=humidity,
                     fetched_at=datetime.utcnow()
                 )
-
+                print(new_data)
                 GreenHouseRepository.add_greenhouse_data(new_data)
-                print(datetime.now().strftime('%d-%m %H:%M') + " Temperature and humidity measurement successful, data saved.")
+                print(datetime.now().strftime(
+                    '%d-%m %H:%M') + " Temperature and humidity measurement successful, data saved.")
             except RuntimeError as error:
-                # Errors happen fairly often, DHT's are hard to read, just keep going
                 print(error.args[0])
-                time.sleep(2.0)
+                sensor.exit()
 
             except Exception as e:
                 print(f"Error storing temperature and humidity data: {str(e)}")
                 sensor.exit()
-                raise error
-            
-            time.sleep(3.0)
+                raise e
 
     @classmethod
     def get_all_humidity(cls):
         return GreenHouseRepository.get_all_humidity()
+
+    @classmethod
+    def get_everything(cls):
+        return GreenHouseRepository.get_everything()
 
     @classmethod
     def get_all_temperature(cls):

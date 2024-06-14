@@ -31,7 +31,7 @@ class Humidity(Resource):
             greenhouse_ns.abort(500, f"Internal server error: {str(e)}")
 
 
-@greenhouse_ns.route('/temperature<date>')
+@greenhouse_ns.route('/temperature/<date>')
 class Temperature(Resource):
     @greenhouse_ns.marshal_list_with(greenhouse_model)
     def get(self, date):
@@ -44,12 +44,25 @@ class Temperature(Resource):
             greenhouse_ns.abort(500, f"Internal server error: {str(e)}")
 
 
-@greenhouse_ns.route('/humidity<date>')
+@greenhouse_ns.route('/humidity/<date>')
 class Humidity(Resource):
     @greenhouse_ns.marshal_list_with(greenhouse_model)
     def get(self, date):
         try:
             data = GreenHouseService.get_humidity_by_date(date)
+            if not data:
+                return [], 200
+            return data, 200
+        except Exception as e:
+            greenhouse_ns.abort(500, f"Internal server error: {str(e)}")
+#  TODO: add range endpoint
+
+@greenhouse_ns.route('/all')
+class All(Resource):
+    @greenhouse_ns.marshal_list_with(greenhouse_model)
+    def get(self):
+        try:
+            data = GreenHouseService.get_everything()
             if not data:
                 return [], 200
             return data, 200
