@@ -3,11 +3,13 @@ from DataLayer.Models.GreenHouseModel import GreenHouseData
 
 
 def get_all_temperature():
-    return GreenHouseData.query.filter(GreenHouseData.temperature).all()
+    temperatures = GreenHouseData.query.with_entities(GreenHouseData.temperature).all()
+    return temperatures
 
 
 def get_all_humidity():
-    return GreenHouseData.query.filter(GreenHouseData.humidity).all()
+    humidity = GreenHouseData.query.with_entities(GreenHouseData.humidity).all()
+    return humidity
 
 
 def get_last_temperature():
@@ -19,11 +21,13 @@ def get_last_humidity():
 
 
 def get_temperature_by_date(date):
-    return GreenHouseData.query.filter_by(date=date).all()
+    temperature_date = GreenHouseData.query.with_entities(GreenHouseData.temperature).filter_by(date=date).all()
+    return [temp.temperature for temp in temperature_date]
 
 
 def get_humidity_by_date(date):
-    return GreenHouseData.query.filter_by(date=date).all()
+    humiditie_date = GreenHouseData.query.with_entities(GreenHouseData.humidity).filter_by(date=date).all()
+    return [hum.humidity for hum in humiditie_date]
 
 
 def add_greenhouse_data(data):

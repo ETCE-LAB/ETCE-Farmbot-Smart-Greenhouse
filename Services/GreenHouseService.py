@@ -44,7 +44,6 @@ def measure_and_store_data():
             fetched_at=datetime.utcnow()
         )
         print(new_data)
-
         GreenHouseRepository.add_greenhouse_data(new_data)
         print(datetime.now().strftime('%d-%m %H:%M') + " Temperature and humidity measurement successful, data saved.")
     except RuntimeError as error:
