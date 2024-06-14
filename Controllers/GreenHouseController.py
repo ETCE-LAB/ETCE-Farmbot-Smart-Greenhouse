@@ -61,7 +61,7 @@ class Humidity(Resource):
 class All(Resource):
     def post(self):
         try:
-            data = GreenHouseService.GreenHouseService.measure_and_store_data(self)
+            data = GreenHouseService.measure_and_store_data()
             if not data:
                 return [], 200
             return data, 200
