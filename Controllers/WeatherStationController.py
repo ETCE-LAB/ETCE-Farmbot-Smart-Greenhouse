@@ -37,6 +37,20 @@ class DataByDate(Resource):
         return data, 200
 
 
+@station_ns.route('/<string:start_date>/<string:end_date>')
+class DataRange(Resource):
+    @station_ns.marshal_list_with(weather_station_model)
+    def get(self, start_date, end_date):
+        data, error = weather_station_service.fetch_weather_data_by_date_range(start_date, end_date)
+        if error:
+            if 'No data found' in error:
+                abort(404, error)
+            elif 'Invalid date format' in error:
+                abort(400, error)
+            else:
+                abort(500, error)
+        return data, 200
+
 @station_ns.route('/fetch')
 class Fetch(Resource):
     def post(self):

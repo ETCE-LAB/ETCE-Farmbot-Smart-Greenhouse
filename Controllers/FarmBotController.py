@@ -6,7 +6,7 @@ from Services.FarmBotServices.WaterField import execute_watering_sequence
 farmbot_ns = Namespace('farmbot', description='Endpoints for FarmBot')
 
 
-@farmbot_ns.route('/moveTo/<float:x>/<float:y>/<float:z>')
+@farmbot_ns.route('/move/<float:x>/<float:y>/<float:z>')
 class Move(Resource):
     def get(self, x, y, z):
         try:
@@ -21,7 +21,7 @@ class Move(Resource):
             farmbot_ns.abort(500, f"Error moving FarmBot: {str(e)}")
 
 
-@farmbot_ns.route('/waterField')
+@farmbot_ns.route('/action/waterField')
 class WaterField(Resource):
     def get(self):
         try:
