@@ -24,4 +24,11 @@ def create_models(api):
         'volume': fields.Float(description='The stored volume of water in liters')
     })
 
-    return weather_station_model, weather_forecast_model, water_management_model
+    greenhouse_model = api.model('GreenHouseData', {
+        'id': fields.Integer(description='The unique identifier of the measurement'),
+        'date': fields.String(required=True, description='The date of the reading'),
+        'temperature': fields.Float(description='The temperature in °C'),
+        'humidity': fields.Float(description='The humidity in %')
+    })
+
+    return weather_station_model, weather_forecast_model, water_management_model, greenhouse_model

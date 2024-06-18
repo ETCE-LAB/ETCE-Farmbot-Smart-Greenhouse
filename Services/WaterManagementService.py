@@ -2,7 +2,7 @@ import time
 from datetime import datetime
 from DataLayer import WaterManagementRepository
 from DataLayer.Models.WaterManagementModel import WaterManagementData
-from Services.IWaterManagementService import IWaterManagementService
+from Services.Interfaces.IWaterManagementService import IWaterManagementService
 
 
 def is_raspberry_pi():
@@ -24,7 +24,8 @@ class WaterManagementService(IWaterManagementService):
 
     def measure_and_store_volume(self):
         if not is_raspberry_pi():
-            print(datetime.now().strftime('%d-%m %H:%M') + " Not running on a Raspberry Pi, can't measure water volume.")
+            print(
+                datetime.now().strftime('%d-%m %H:%M') + " Not running on a Raspberry Pi, can't measure water volume.")
             return
         else:
             try:
@@ -71,3 +72,13 @@ class WaterManagementService(IWaterManagementService):
                 print(f"Error storing volume data: {str(e)}")
             finally:
                 GPIO.cleanup()
+
+    @classmethod
+    def get_all_data(cls):
+        return WaterManagementRepository.get_all_water_data()
+
+    def get_last_data(self):
+        return WaterManagementRepository.get_last_water_data()
+
+    def get_volume_by_date(self, date):
+        return WaterManagementRepository.get_volume_by_date(date)

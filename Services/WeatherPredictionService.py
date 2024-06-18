@@ -6,11 +6,10 @@ from DataLayer.Models.WeatherPredictionModel import WeatherForecastData
 from DataLayer.WeatherPredictionRepository import (
     add_forecast_data,
     commit_changes,
-    get_forecast_data_by_date,
     update_forecast_data,
 )
 from app import app
-from Services.IWeatherPredictionService import IWeatherPredictionService
+from Services.Interfaces.IWeatherPredictionService import IWeatherPredictionService
 
 
 class WeatherPredictionService(IWeatherPredictionService):
@@ -65,7 +64,7 @@ class WeatherPredictionService(IWeatherPredictionService):
                         sunshine_duration_minutes = int(data['daily']['sunshine_duration'][i] / 60)
                         precipitation_mm = data['daily']['precipitation_sum'][i]
 
-                        forecast_data = get_forecast_data_by_date(date)
+                        forecast_data = WeatherPredictionRepository.get_forecast_data_by_date(date)
                         if forecast_data:
                             update_forecast_data(
                                 forecast_data, max_temperature, min_temperature, sunshine_duration_minutes,
@@ -103,7 +102,7 @@ class WeatherPredictionService(IWeatherPredictionService):
     @staticmethod
     def get_weather_forecast_by_date(date):
         try:
-            forecast_data = get_forecast_data_by_date(date)
+            forecast_data = WeatherPredictionRepository.get_forecast_data_by_date(date)
             if forecast_data:
                 return {
                     'date': forecast_data.date,
@@ -114,5 +113,22 @@ class WeatherPredictionService(IWeatherPredictionService):
                 }, 200
             else:
                 return {'error': 'No forecast data available for this date'}, 404
+        except Exception as e:
+            return {'error': f"An error occurred: {e}"}, 500
+
+    @staticmethod
+    def get_weather_forecast_range(start_date, end_date):
+        try:
+            forecast_data = WeatherPredictionRepository.get_forecast_data_by_date_range(start_date, end_date)
+            if forecast_data:
+                return {
+                    'date': forecast_data.date,
+                    'max_temperature': forecast_data.max_temperature,
+                    'min_temperature': forecast_data.min_temperature,
+                    'sunshine_duration_minutes': forecast_data.sunshine_duration_minutes,
+                    'precipitation_mm': forecast_data.precipitation_mm
+                }, 200
+            else:
+                return {'error': 'No forecast data available for this date range'}, 404
         except Exception as e:
             return {'error': f"An error occurred: {e}"}, 500

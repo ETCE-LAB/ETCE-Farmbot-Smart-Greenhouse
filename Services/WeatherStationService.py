@@ -1,10 +1,10 @@
 import json
-from datetime import datetime
+from datetime import datetime, timedelta
 import requests
 import config
 from DataLayer.Models.WeatherStationModel import WeatherStationData
-from DataLayer.WeatherStationRepository import add_weather_data, get_weather_data_by_date
-from Services.IWeatherStationService import IWeatherStationService
+from DataLayer.WeatherStationRepository import add_weather_data, get_weather_data_by_date, get_weather_data_by_date_range
+from Services.Interfaces.IWeatherStationService import IWeatherStationService
 from app import app
 
 
@@ -52,6 +52,22 @@ class WeatherStationService(IWeatherStationService):
             return data, None
         except ValueError:
             return None, f'Invalid date format: {date_str}'
+        except Exception as e:
+            print(f"Error fetching weather data: {str(e)}")
+            return None, f"Internal server error: {str(e)}"
+
+    def fetch_weather_data_by_date_range(self, start_date_str, end_date_str):
+        try:
+            start_date = datetime.fromisoformat(start_date_str.replace('Z', '+00:00'))
+            end_date = datetime.fromisoformat(end_date_str.replace('Z', '+00:00'))
+            if start_date >= end_date:
+                return None, 'Start date must be before end date'
+            data = get_weather_data_by_date_range(start_date, end_date)
+            if not data:
+                return None, f'No data found for the range {start_date_str} to {end_date_str}'
+            return data, None
+        except ValueError:
+            return None, 'Invalid date format'
         except Exception as e:
             print(f"Error fetching weather data: {str(e)}")
             return None, f"Internal server error: {str(e)}"

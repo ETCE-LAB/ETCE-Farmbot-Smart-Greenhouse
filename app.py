@@ -20,7 +20,7 @@ def custom_ui():
 
 
 # Initialize models
-weather_station_model, weather_forecast_model, water_management_model = create_models(api)
+weather_station_model, weather_forecast_model, water_management_model, greenhouse_model = create_models(api)
 
 
 # Register namespaces
@@ -29,12 +29,14 @@ def register_namespaces():
     from Controllers.WaterManagementController import water_ns
     from Controllers.WeatherStationController import station_ns
     from Controllers.WeatherPredictionController import forecast_ns
+    from Controllers.GreenHouseController import greenhouse_ns
 
     print("Registering namespaces...")
     api.add_namespace(station_ns)
     api.add_namespace(forecast_ns)
     api.add_namespace(water_ns)
     api.add_namespace(farmbot_ns)
+    api.add_namespace(greenhouse_ns)
     print("Namespaces registered.")
 
 
