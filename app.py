@@ -1,7 +1,6 @@
 from flask import Flask, render_template
 from flask_restx import Api
 from flask_sqlalchemy import SQLAlchemy
-
 from DataLayer.Models.ApiSchemas import create_models
 
 app = Flask(__name__, template_folder='templates', static_folder='static')
@@ -11,7 +10,11 @@ db = SQLAlchemy(app)
 
 api = Api(app, version='3.0', title='API',
           description='Endpoints for the Smart Greenhouse System by ETCE-LAB',
-          doc='/swagger')
+          doc='/swagger',
+          contact='your-email@example.com',
+          license='Readme',
+          license_url='https://github.com/ETCE-LAB/ETCE-Farmbot-Smart-Greenhouse/blob/main/README.md'
+          )
 
 
 @api.documentation
@@ -41,3 +44,6 @@ def register_namespaces():
 
 
 register_namespaces()
+
+if __name__ == '__main__':
+    app.run(debug=True)
