@@ -73,12 +73,18 @@ class WaterManagementService(IWaterManagementService):
             finally:
                 GPIO.cleanup()
 
-    @classmethod
-    def get_all_data(cls):
+    @staticmethod
+    def get_all_water_data():
         return WaterManagementRepository.get_all_water_data()
 
-    def get_last_data(self):
+    @staticmethod
+    def get_last_water_data():
         return WaterManagementRepository.get_last_water_data()
 
-    def get_volume_by_date(self, date):
+    @staticmethod
+    def get_volume_by_date(date):
         return WaterManagementRepository.get_volume_by_date(date)
+
+    @staticmethod
+    def get_volume_by_date_range(start_date, end_date):
+        return WaterManagementRepository.get_volume_by_date_range(start_date, end_date)

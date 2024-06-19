@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 import requests
 import config
 from DataLayer.Models.WeatherStationModel import WeatherStationData
-from DataLayer.WeatherStationRepository import add_weather_data, get_weather_data_by_date, get_weather_data_by_date_range
+from DataLayer.WeatherStationRepository import add_weather_data, get_weather_data_by_date
 from Services.Interfaces.IWeatherStationService import IWeatherStationService
 from app import app
 
