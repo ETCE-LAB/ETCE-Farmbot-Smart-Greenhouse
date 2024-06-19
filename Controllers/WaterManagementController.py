@@ -13,7 +13,7 @@ class Water(Resource):
         try:
             data = WaterManagementService.get_all_water_data()
             if not data:
-                abort(404, 'Data not found')
+                return [], 200
             return data, 200
         except Exception as e:
             water_ns.abort(500, f"Internal server error: {str(e)}")
@@ -62,7 +62,7 @@ class Water(Resource):
 class Water(Resource):
     def post(self):
         try:
-            WaterManagementService.measure_and_store_volume()
+            WaterManagementService.measure_and_store_volume(self)
             return {'status': 'Water measurement successful'}, 200
         except Exception as e:
             return {'status': f"Internal server error: {str(e)}"}, 500

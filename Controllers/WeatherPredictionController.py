@@ -45,7 +45,7 @@ class FetchForecast(Resource):
             forecast_ns.abort(500, f"Internal server error: {str(e)}")
 
 
-@forecast_ns.route('/fetch-range/<start_date>/<end_date>')  # get forecast from API and save to database for range of dates
+@forecast_ns.route('/fetch/<start_date>/<end_date>')  # get forecast from API and save to database for range of dates
 class FetchForecastRange(Resource):
     def post(self, start_date, end_date):
         try:
@@ -53,5 +53,20 @@ class FetchForecastRange(Resource):
             if result['code'] == 500:
                 abort(500, result['message'])
             return {'status': result['message']}, result['code']
+        except Exception as e:
+            forecast_ns.abort(500, f"Internal server error: {str(e)}")
+
+
+@forecast_ns.route('/<start_date>/<end_date>')
+class ForecastRange(Resource):
+    @forecast_ns.marshal_with(weather_forecast_model)
+    def get(self, start_date, end_date):
+        try:
+            forecast_data, status_code = WeatherPredictionService.get_weather_forecast_range(start_date, end_date)
+            if status_code == 404:
+                abort(404, forecast_data['error'])
+            elif status_code == 500:
+                abort(500, forecast_data['error'])
+            return forecast_data, 200
         except Exception as e:
             forecast_ns.abort(500, f"Internal server error: {str(e)}")
