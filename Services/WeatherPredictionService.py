@@ -10,7 +10,7 @@ from DataLayer.WeatherPredictionRepository import (
     update_forecast_data,
 )
 from app import app
-from Services.IWeatherPredictionService import IWeatherPredictionService
+from Services.Interfaces.IWeatherPredictionService import IWeatherPredictionService
 
 
 class WeatherPredictionService(IWeatherPredictionService):

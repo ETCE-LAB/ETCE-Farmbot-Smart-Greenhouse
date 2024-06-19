@@ -1,8 +1,5 @@
 from flask import abort
 from flask_restx import Resource, Namespace
-
-from DataLayer import WaterManagementRepository
-from DataLayer.WaterManagementRepository import get_all_water_data, get_volume_by_date
 from Services.WaterManagementService import WaterManagementService
 from app import water_management_model
 

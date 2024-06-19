@@ -2,7 +2,7 @@ import time
 from datetime import datetime
 from DataLayer import WaterManagementRepository
 from DataLayer.Models.WaterManagementModel import WaterManagementData
-from Services.IWaterManagementService import IWaterManagementService
+from Services.Interfaces.IWaterManagementService import IWaterManagementService
 
 
 def is_raspberry_pi():
