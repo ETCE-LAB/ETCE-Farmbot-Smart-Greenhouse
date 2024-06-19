@@ -116,3 +116,14 @@ class WeatherPredictionService(IWeatherPredictionService):
                 return {'error': 'No forecast data available for this date'}, 404
         except Exception as e:
             return {'error': f"An error occurred: {e}"}, 500
+
+    @classmethod
+    def get_weather_forecast_by_date_range(cls, start_date, end_date):
+        try:
+            forecast_data = WeatherPredictionRepository.get_forecast_data_by_date_range(start_date, end_date)
+            if forecast_data:
+                return forecast_data, 200
+            else:
+                return {'error': 'No forecast data available for this date range'}, 404
+        except Exception as e:
+            return {'error': f"An error occurred: {e}"}, 500

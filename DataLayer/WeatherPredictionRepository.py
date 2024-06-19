@@ -26,3 +26,7 @@ def update_forecast_data(forecast_data, max_temperature, min_temperature, sunshi
     forecast_data.sunshine_duration_minutes = sunshine_duration_minutes
     forecast_data.precipitation_mm = precipitation_mm
     add_forecast_data(forecast_data)
+
+
+def get_forecast_data_by_date_range(start_date, end_date):
+    return WeatherForecastData.query.filter(WeatherForecastData.date.between(start_date, end_date)).all()

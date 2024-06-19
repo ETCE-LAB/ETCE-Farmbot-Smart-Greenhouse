@@ -14,3 +14,7 @@ class IWeatherPredictionService(ABC):
     @abstractmethod
     def get_weather_forecast_by_date(self, date):
         pass
+
+    @abstractmethod
+    def get_weather_forecast_by_date_range(self, start_date, end_date):
+        pass

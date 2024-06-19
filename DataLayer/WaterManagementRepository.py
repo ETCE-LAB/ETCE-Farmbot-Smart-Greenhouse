@@ -15,6 +15,10 @@ def get_volume_by_date(date):
     return WaterManagementData.query.filter_by(date=date).all()
 
 
+def get_volume_by_date_range(start_date, end_date):
+    return WaterManagementData.query.filter(WaterManagementData.date.between(start_date, end_date)).all()
+
+
 def delete_water_data_by_id(id):
     data = WaterManagementData.query.filter_by(id=id).first()
     db.session.delete(data)

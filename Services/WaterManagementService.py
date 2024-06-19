@@ -24,7 +24,8 @@ class WaterManagementService(IWaterManagementService):
 
     def measure_and_store_volume(self):
         if not is_raspberry_pi():
-            print(datetime.now().strftime('%d-%m %H:%M') + " Not running on a Raspberry Pi, can't measure water volume.")
+            print(
+                datetime.now().strftime('%d-%m %H:%M') + " Not running on a Raspberry Pi, can't measure water volume.")
             return
         else:
             try:
@@ -71,3 +72,19 @@ class WaterManagementService(IWaterManagementService):
                 print(f"Error storing volume data: {str(e)}")
             finally:
                 GPIO.cleanup()
+
+    @staticmethod
+    def get_all_water_data():
+        return WaterManagementRepository.get_all_water_data()
+
+    @staticmethod
+    def get_last_water_data():
+        return WaterManagementRepository.get_last_water_data()
+
+    @staticmethod
+    def get_volume_by_date(date):
+        return WaterManagementRepository.get_volume_by_date(date)
+
+    @staticmethod
+    def get_volume_by_date_range(start_date, end_date):
+        return WaterManagementRepository.get_volume_by_date_range(start_date, end_date)
