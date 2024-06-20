@@ -80,3 +80,14 @@ class All(Resource):
             return data, 200
         except Exception as e:
             greenhouse_ns.abort(500, f"Internal server error: {str(e)}")
+
+
+@greenhouse_ns.route('/data/<date>')
+class DateData(Resource):
+    @greenhouse_ns.marshal_list_with(greenhouse_model)
+    def get(self, date):
+        try:
+            data = GreenHouseService.get_data_by_date(date)
+            return data, 200
+        except Exception as e:
+            greenhouse_ns.abort(500, f"Error: {str(e)}")

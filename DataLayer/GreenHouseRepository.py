@@ -26,8 +26,8 @@ def get_temperature_by_date(date):  # TODO: fix endpoint returning empty list
 
 
 def get_humidity_by_date(date):  # TODO: fix endpoint returning empty list
-    humiditie_date = GreenHouseData.query.with_entities(GreenHouseData.humidity).filter_by(date=date).all()
-    return [hum.humidity for hum in humiditie_date]
+    humidity_data = GreenHouseData.query.with_entities(GreenHouseData.humidity).filter_by(date=date).all()
+    return [hum.humidity for hum in humidity_data]
 
 
 def add_greenhouse_data(data):
@@ -35,5 +35,10 @@ def add_greenhouse_data(data):
     db.session.commit()
 
 
-def get_everything():
+def get_all_data():
     return GreenHouseData.query.all()
+
+
+def get_data_by_date(date):
+    data = GreenHouseData.query.with_entities(GreenHouseData.temperature, GreenHouseData.humidity).filter_by(date=date).all()
+    return data
