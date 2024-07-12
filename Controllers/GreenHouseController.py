@@ -4,7 +4,7 @@ from app import greenhouse_model
 
 greenhouse_ns = Namespace('greenhouse', description='Endpoints for Greenhouse management')
 
-
+"""
 @greenhouse_ns.route('/temperature')
 class Temperature(Resource):
     @greenhouse_ns.marshal_list_with(greenhouse_model)
@@ -31,6 +31,7 @@ class Humidity(Resource):
                 return data, 200
         except Exception as e:
             greenhouse_ns.abort(500, f"Internal server error: {str(e)}")
+"""
 
 
 @greenhouse_ns.route('/temperature/<date>')
@@ -47,6 +48,17 @@ class Temperature(Resource):
             greenhouse_ns.abort(500, f"Internal server error: {str(e)}")
 
 
+@greenhouse_ns.route('temperature/<start_date>/<end_date>')
+class HumidityRange(Resource):
+    @greenhouse_ns.marshal_list_with(greenhouse_model)
+    def get(self, start_date, end_date):
+        try:
+            data = GreenHouseService.get_temperature_range(start_date, end_date)
+            return data, 200
+        except Exception as e:
+            greenhouse_ns.abort(500, f"Internal server error: {str(e)}")
+
+
 @greenhouse_ns.route('/humidity/<date>')
 class Humidity(Resource):
     @greenhouse_ns.marshal_list_with(greenhouse_model)
@@ -57,6 +69,17 @@ class Humidity(Resource):
                 return [], 200
             else:
                 return data, 200
+        except Exception as e:
+            greenhouse_ns.abort(500, f"Internal server error: {str(e)}")
+
+
+@greenhouse_ns.route('humidity/<start_date>/<end_date>')
+class HumidityRange(Resource):
+    @greenhouse_ns.marshal_list_with(greenhouse_model)
+    def get(self, start_date, end_date):
+        try:
+            data = GreenHouseService.get_humidity_range(start_date, end_date)
+            return data, 200
         except Exception as e:
             greenhouse_ns.abort(500, f"Internal server error: {str(e)}")
 

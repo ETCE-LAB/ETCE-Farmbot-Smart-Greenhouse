@@ -42,3 +42,11 @@ def get_all_data():
 def get_data_by_date(date):
     data = GreenHouseData.query.with_entities(GreenHouseData.temperature, GreenHouseData.humidity).filter_by(date=date).all()
     return data
+
+
+def get_humidity_by_date_range(start_date, end_date):
+    return GreenHouseData.query.with_entities(GreenHouseData.humidity).filter(GreenHouseData.date.between(start_date, end_date)).all()
+
+
+def get_temperature_by_date_range(start_date, end_date):
+    return GreenHouseData.query.with_entities(GreenHouseData.temperature).filter(GreenHouseData.date.between(start_date, end_date)).all()

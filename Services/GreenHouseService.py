@@ -77,3 +77,11 @@ def get_all_data():
 
 def get_data_by_date(date):
     return GreenHouseRepository.get_data_by_date(date)
+
+
+def get_humidity_range(start_date, end_date):
+    return GreenHouseRepository.get_humidity_by_date_range(start_date, end_date)
+
+
+def get_temperature_range(start_date, end_date):
+    return GreenHouseRepository.get_temperature_by_date_range(start_date, end_date)
