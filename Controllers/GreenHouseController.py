@@ -73,9 +73,7 @@ class Humidity(Resource):
             greenhouse_ns.abort(500, f"Internal server error: {str(e)}")
 
 
-@greenhouse_ns.route('humidity/<start_date>/'
-                     ''
-                     '<end_date>')
+@greenhouse_ns.route('humidity/<start_date>/<end_date>')
 class HumidityRange(Resource):
     @greenhouse_ns.marshal_list_with(greenhouse_model)
     def get(self, start_date, end_date):
