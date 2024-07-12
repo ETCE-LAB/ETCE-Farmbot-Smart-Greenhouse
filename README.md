@@ -209,7 +209,7 @@ Contributions are welcome! Please read our CONTRIBUTING.md for details on the pr
 ## Authors
 
 - **Benjamin Leiding** - Product Owner
-- **Johannes Meier** - Scrum Master
+- **Johannes Mayer** - Scrum Master
 - **Mattes Knigge** - Head Developer
 - **Izzeldeen Alzeer** - Developer
 
