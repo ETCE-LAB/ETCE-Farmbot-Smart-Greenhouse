@@ -1,132 +1,158 @@
-# ETCE-Farmbot-Smart-Greenhouse
+# SmartGreenhouse
 
-This project includes the backend server for the SmartGreenhouse.
-Within the SmartGreenhouse, there is a FarmBot responsible for managing the plants and vegetables.
-The backend server, built using Flask, provides several endpoints that enable the monitoring of weather data and management of resources such as water and power for the FarmBot. 
-Additionally, the backend integrates with various weather services to fetch real-time data, ensuring optimal growing conditions.
-All gathered data is stored in a database, allowing for comprehensive analysis and efficient resource allocation.
-This integration aims to create a fully automated and sustainable greenhouse management system.
+## About the Project
+
+SmartGreenhouse aims to create an intelligent greenhouse that captures internal and external environmental conditions using a variety of sensors. The collected data is stored in a database for later analysis. Additionally, the project utilizes collected rainwater to ensure an independent water supply. A central component of the greenhouse is the FarmBot, which fully autonomously tends to the plants from sowing to harvest.
 
 ## Table of Contents
 
 - [Features](#features)
-- [Requirements](#requirements)
+- [Technologies](#technologies)
 - [Installation](#installation)
-- [Configuration](#configuration)
 - [Usage](#usage)
 - [API Endpoints](#api-endpoints)
 - [Contributing](#contributing)
+- [Authors](#authors)
 - [License](#license)
+- [Diagrams](#diagrams)
 
 ## Features
 
-- **Weather Forecast Fetching**: Retrieve and store weather forecast data.
-- **Weather Station Data Processing**: Fetch and process data from a weather station.
-- **Logging and Error Handling**: Detailed logging and error handling for better debugging and monitoring.
-- **Database Integration**: Store and manage data in a database.
-- **tba**: tba
+- **Data Collection**: Comprehensive monitoring of environmental conditions both inside and outside the greenhouse.
+- **Water Recycling**: Independence from external water supply through the use of rainwater.
+- **Autonomous Plant Care**: Use of a FarmBot for fully automatic care of the plants.
 
-## Requirements
+## Technologies
 
-- all requirements are listed in the `requirements.txt` file
+- **Backend**: Flask (Python)
+- **Database**: SQLAlchemy
+- **Automation**: Integration of FarmBot
 
 ## Installation
 
 1. **Clone the Repository**:
-   ```bash
+   ```
    git clone https://github.com/ETCE-LAB/ETCE-Farmbot-Smart-Greenhouse.git
    cd ETCE-Farmbot-Smart-Greenhouse
    ```
 
-2. **Create a Virtual Environment**:
-   ```bash
+2. **Create and Activate a Virtual Environment**:
+   ```
    python -m venv venv
-   source venv/bin/activate  # On Windows, use `venv\Scripts\activate`
+   source venv/bin/activate  # On Windows use `venv\Scripts\activate`
    ```
 
-3. **Install Dependencies**:
-   ```bash
+3. **Install Required Dependencies**:
+   ```
    pip install -r requirements.txt
    ```
 
-## Configuration
-
-Create a `config.py` file in the root directory and add the following configurations:
-
-```python
-# config.py
-weather_forecast_url = "YOUR_WEATHER_FORECAST_API_URL"
-weatherstation_device_url = "YOUR_WEATHER_STATION_API_URL"
-weatherstation_access_key = "YOUR_WEATHER_STATION_ACCESS_KEY"
-farmbot_api_key = "YOUR_FARMBOT_API_KEY"
-```
-
 ## Usage
 
-1. **Run the Flask Application**:
-   ```bash
-   flask run
-   ```
+Start the backend with:
+
+```
+python main.py
+```
+
+The Flask endpoints can be accessed via the provided Swagger UI at `http://localhost:5000/swagger`.
+
 ## API Endpoints
 
-### Fetch Weather Forecast
+### Weather Station
+- **Description**: Endpoints for capturing and processing weather station data.
+- **Endpoints**:
+  - GET `/station/data/<date>`: Displays weather data for a specific date.
+    - **Response**:
+      ```json
+      {
+        "id": 101,
+        "measurement_value": 22.5,
+        "measurement_type": "Temperature",
+        "received_at": "2024-07-12T15:30:00Z"
+      }
+      ```
 
-- **Endpoint**: `/forecast/get/<date>`
-- **Method**: `GET`
-- **Response**:
-  ```json
-  {
-    "id": 0,
-    "date": "string",
-    "max_temperature": 0,
-    "min_temperature": 0,
-    "sunshine_duration_minutes": 0,
-    "precipitation_mm": 0
-  }
-  ```
+### Weather Forecast
+- **Description**: Endpoints for querying weather forecasts.
+- **Endpoints**:
+  - GET `/forecast/<date>`: Retrieves weather forecast data for a specific date.
+    - **Response**:
+      ```json
+      {
+        "id": 202,
+        "date": "2024-07-13",
+        "max_temperature": 25.0,
+        "min_temperature": 15.0,
+        "sunshine_duration_minutes": 320,
+        "precipitation_mm": 5.0
+      }
+      ```
 
-### Fetch Weather Forecast Range
+### Water Management
+- **Description**: Endpoints for managing water consumption and storage.
+- **Endpoints**:
+  - GET `/water/volume/<date>`: Displays water volume on a specific date.
+    - **Response**:
+      ```json
+      {
+        "id": 303,
+        "date": "2024-07-12",
+        "volume": 1500.0
+      }
+      ```
 
-- **Endpoint**: `/forecast/range/<start_date>/<end_date>`
-- **Method**: `GET`
-- **Response**:
-  ```json
-  {
-    "id": 0,
-    "date": "start_date",
-    "max_temperature": 0,
-    "min_temperature": 0,
-    "sunshine_duration_minutes": 0,
-    "precipitation_mm": 0
-  },
-  {
-    "id": 0,
-    "date": "end_date",
-    "max_temperature": 0,
-    "min_temperature": 0,
-    "sunshine_duration_minutes": 0,
-    "precipitation_mm": 0
-  }
-  ```
-
-### Fetch and Process Data from Weather Station
-
-- **Endpoint**: `/station/data`
-- **Method**: `GET`
-- **Response**:
-  ```json
-  {
-    "id": 0,
-    "measurement_value": 0,
-    "measurement_type": "string",
-    "received_at": "string"
-  }
-  ```
+### Greenhouse Management
+- **Description**: Endpoints for monitoring and managing conditions within the greenhouse.
+- **Endpoints**:
+  - GET `/greenhouse/data/<date>`: Displays all environmental data for a specific date.
+    - **Response**:
+      ```json
+      {
+        "id": 404,
+        "date": "2024-07-12",
+        "temperature": 22.5,
+        "humidity": 48.0
+      }
+      ```
 
 ## Contributing
 
-Contributions are welcome! Please create a pull request or open an issue to discuss any changes.
+Contributions are welcome! Please read our CONTRIBUTING.md for details on the process for submitting pull requests.
+
+## Authors
+
+- **Benjamin Leiding** - Product Owner
+- **Johannes Meier** - Scrum Master
+- **Mattes Knigge** - Head Developer
+- **Izzeldeen Alzeer** - Developer
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+This project is licensed under the XYZ License - see the [LICENSE.md](LICENSE) file for details.
+
+## Diagrams
+
+### System Overview Diagram
+
+This diagram provides an overview of the main components and workflow of the SmartGreenhouse.
+
+![System Overview](diagrams/Farmbot%20-%20ComponentDiagram.jpg)
+
+### Deployment Diagram
+
+This diagram details the deployment architecture of the SmartGreenhouse software and hardware components.
+
+![Deployment Diagram](diagrams/Farmbot%20-%20Deployment%20Diagram.jpeg)
+
+### Domain Model
+
+This diagram presents the domain model of the SmartGreenhouse, illustrating the main entities and their relationships.
+
+![Domain Model](diagrams/Farmbot%20-%20Domain%20Model.jpeg)
+
+### Electrical Layout of the Greenhouse
+
+This diagram shows the electrical layout of the SmartGreenhouse, detailing the wiring and connections for automation.
+
+![Electrical Layout](diagrams/Farmbot%20-%20Smart%20GreenHouse%20electrical%20layout.jpg)
