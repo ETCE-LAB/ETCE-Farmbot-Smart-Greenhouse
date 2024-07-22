@@ -15,7 +15,8 @@ SmartGreenhouse aims to create an intelligent greenhouse that captures internal 
 - [Authors](#authors)
 - [License](#license)
 - [Diagrams](#diagrams)
-
+- [Hardware-Components](#Hardware-Components).
+  
 ## Features
 
 - **Data Collection**: Comprehensive monitoring of environmental conditions both inside and outside the greenhouse.
@@ -242,7 +243,7 @@ This diagram presents the domain model of the SmartGreenhouse, illustrating the 
 This diagram shows the electrical layout of the SmartGreenhouse, detailing the wiring and connections for automation.
 ![Electrical Layout](diagrams/Farmbot%20-%20Smart%20GreenHouse%20electrical%20layout.jpg)
 
-### Hardware-Components
+### Hardware Components
 
 
 Smart GreenHouse Electrical Layout - Hardware Components
