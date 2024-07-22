@@ -9,14 +9,14 @@ SmartGreenhouse aims to create an intelligent greenhouse that captures internal 
 - [Features](#features)
 - [Technologies](#technologies)
 - [Installation](#installation)
+- [Hardware Components](#hardware-components)
 - [Usage](#usage)
 - [API Endpoints](#api-endpoints)
 - [Contributing](#contributing)
 - [Authors](#authors)
 - [License](#license)
 - [Diagrams](#diagrams)
-- [Hardware-Components](#Hardware-Components).
-  
+
 ## Features
 
 - **Data Collection**: Comprehensive monitoring of environmental conditions both inside and outside the greenhouse.
@@ -32,6 +32,7 @@ SmartGreenhouse aims to create an intelligent greenhouse that captures internal 
 ## Installation
 
 1. **Clone the Repository**:
+
    ```
    git clone https://github.com/ETCE-LAB/ETCE-Farmbot-Smart-Greenhouse.git
    cd ETCE-Farmbot-Smart-Greenhouse
@@ -47,6 +48,51 @@ SmartGreenhouse aims to create an intelligent greenhouse that captures internal 
    ```
    pip install -r requirements.txt
    ```
+
+## Hardware Components
+
+
+![Electrical Layout](diagrams/Farmbot%20-%20Smart%20GreenHouse%20electrical%20layout.jpg)
+
+
+1. **Power Source**
+   - The main power supply of the system, utilizing the standard household voltage of 230V. This primary source is converted to the necessary voltages for various components: 5V for Raspberry Pis and 12V for pumps and lighting.
+
+2. **Workstation**
+   - USB Type-C docking station for connecting to the monitor, providing both charging and data connectivity. Required voltage: 5V.
+   - Monitor with Type-C connection for display and control. Required voltage: 5V.
+   - [Notebook wall mount](https://www.conrad.de/de/p/speaka-professional-sp-mm-710-1fach-monitor-wandhalterung-33-0-cm-13-68-6-cm-27-schwarz-hoehenverstellbar-drehba-2588303.html) for ergonomic and space-saving setup.
+
+3. **Raspberry Pi 5**
+   - Used to control various sensors and host the backend system. Required voltage: 5V.
+
+4. **[FarmBot](https://farm.bot/products/farmbot-genesis-v1-7)**
+   - An automated gardening system that manages plant care from sowing to harvest. Required voltage: 12V.
+
+5. **[Sockets and Connections](https://www.conrad.de/de/p/brennenstuhl-1161750020-strom-verlaengerungskabel-gelb-blau-5-00-m-at-n05v3v3-f-3g-1-5-mm-2303709.html)**
+   - Waterproof sockets and cables that ensure reliable connection and power supply to all components.
+
+6. **[Pump](https://www.conrad.de/de/p/toolcraft-to-7159158-niedervolt-druckwasserpumpe-1020-l-h-12-v-dc-2386386.html)**
+   - Supplies pressurized water for the FarmBot. Required voltage: 12V.
+
+7. **[Power Converter for the Pump](https://led-profi.de/led-trafo-netzteil/12v-led-trafos-standard/165498859/led-trafo-12v-180w-15a-mm-pfc-dc-schaltnetzteil-slim-line-ftpc200v12-moebel?c=1929341)**
+   - Converts 230V to 12V for the pump, ensuring sufficient amperage.
+
+8. **[TAPO Sockets](https://www.reichelt.de/de/de/schaltbare-wlan-steckdose-tplink-tapo-p100-p270914.html?PROVID=2788&gad_source=1&gclid=CjwKCAjwhvi0BhA4EiwAX25uj2u371wdbBkpY8luAcP6tm1R22U-9cxW5mjwfDROY-HqNlhTUYKzmxoCkgkQAvD_BwE&&r=1)**
+   - Controllable power sockets that can be toggled via Raspberry Pi to enable or disable the pump or other accessories.
+
+9. **[Snail Defense System](https://www.onlineshop-reich.de/garten/schaedlingsbekaempfung/snailstop-elektrischer-schneckenzaun-schnecken-stop-zuverlaessig-und-ohne-gift_30100_4145)**
+   - A non-lethal defensive system against snails, ensuring they do not harm the plants.
+
+10. **Gardena and Hose Connections**
+    - Quick connectors to link hoses and the FarmBot system.
+    - 3/4-inch hose to connect the rain barrel to the pump and FarmBot.
+
+11. **[Rain Barrel](https://www.obi.de/p/6739676/garantia-regentonne-rund-210-l-gruen)**
+    - Stores collected rainwater for irrigation purposes.
+
+12. **[Float Valve](https://www.siepmann.net/SIMA_Ersatzventil.html)**
+    - Automatically refills the rain barrel to prevent the pump from running dry.
 
 ## Usage
 
@@ -242,44 +288,6 @@ This diagram presents the domain model of the SmartGreenhouse, illustrating the 
 
 This diagram shows the electrical layout of the SmartGreenhouse, detailing the wiring and connections for automation.
 ![Electrical Layout](diagrams/Farmbot%20-%20Smart%20GreenHouse%20electrical%20layout.jpg)
-
-### Hardware Components
-
-
-Smart GreenHouse Electrical Layout - Hardware Components
-
-
-1. Power Source
-   - Hauptstromquelle des Systems.
-
-2. Dockingstation
-   - Dockingstation für das Laden und die Datenverbindung des Monitors.
-
-3. Monitor
-   - Anzeigegerät zur Überwachung und Steuerung.
-
-4. RPi I (Raspberry Pi I)
-   - Sensoren für Temperatur und Luftfeuchtigkeit.
-
-5. RPi II (Raspberry Pi II)
-   - Kamera für die Überwachung des Gewächshauses.
-
-6. RPi III (Raspberry Pi III)
-   - Ultraschal Sensor für den Wasserstand.
-
-7. Farmduino
-   - Steuerungseinheit für den FarmBot.
-
-8. FarmBot
-   - Automatisiertes Gartensystem.
-
-9. Steckdosen und Verbindungen(Cabels).
-
-10. Pump
-    - Pumpe für die Bewässerung.
-
-11. Light
-    - Beleuchtungseinheit im Gewächshaus.
 
 
 
