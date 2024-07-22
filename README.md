@@ -241,6 +241,48 @@ This diagram presents the domain model of the SmartGreenhouse, illustrating the 
 
 This diagram shows the electrical layout of the SmartGreenhouse, detailing the wiring and connections for automation.
 
+### Hardware-Components
+
+
+Smart GreenHouse Electrical Layout - Hardware Components
+
+
+1. Power Source
+   - Hauptstromquelle des Systems.
+
+2. Dockingstation
+   - Dockingstation für das Laden und die Datenverbindung des Monitors.
+
+3. Monitor
+   - Anzeigegerät zur Überwachung und Steuerung.
+
+4. RPi I (Raspberry Pi I)
+   - Sensoren für Temperatur und Luftfeuchtigkeit.
+
+5. RPi II (Raspberry Pi II)
+   - Kamera für die Überwachung des Gewächshauses.
+
+6. RPi III (Raspberry Pi III)
+   - Sensor für den Wasserstand.
+
+7. Farmduino
+   - Steuerungseinheit für den FarmBot.
+
+8. FarmBot
+   - Automatisiertes Gartensystem.
+
+9. Steckdosen und Verbindungen.
+
+10. Pump
+    - Pumpe für die Bewässerung.
+
+11. Light
+    - Beleuchtungseinheit im Gewächshaus.
+
+
+
+
+
 ![Electrical Layout](diagrams/Farmbot%20-%20Smart%20GreenHouse%20electrical%20layout.jpg)
 
 ### Adding New Tasks to the Scheduler
