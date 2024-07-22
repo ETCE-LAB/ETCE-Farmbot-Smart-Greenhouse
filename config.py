@@ -1,0 +1,15 @@
+# Weather Station
+weatherstation_application_id = "tuc-isse-sensorik"
+weatherstation_device_id = "eui-70b3d57ed005ea4a"
+weatherstation_access_key = "NNSXS.5ZIAFI7TTRF4AP2ZWZMZDKUP5FOHB22RV27622A.7ICBAO3ZWFJ2EQVIZQRNQMWN2E2QERP5UQXDTD3KTINPH57MPNGA"
+weatherstation_data_type = "uplink_message"
+weatherstation_device_url = f"https://eu1.cloud.thethings.network/api/v3/as/applications/{weatherstation_application_id}/devices/{weatherstation_device_id}/packages/storage/{weatherstation_data_type}"
+
+# Weather Forecast
+weather_forecast_url = "https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&current=temperature_2m,rain&daily=temperature_2m_max,temperature_2m_min,sunshine_duration,precipitation_sum&timezone=Europe%2FBerlin&past_days=7&forecast_days=16"
+
+# FarmBot
+farmbot_api_key = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiJ1bmtub3duIiwic3ViIjoyNjE1OCwiaWF0IjoxNzE1NjkzMjIxLCJqdGkiOiIyNTkzNzMxZi01ZjMwLTQwZDctYTFlOC1lNjk4ODU2MzA0MjMiLCJpc3MiOiIvL215LmZhcm0uYm90OjQ0MyIsImV4cCI6MTcyMDg3NzIyMSwibXF0dCI6ImNsZXZlci1vY3RvcHVzLnJtcS5jbG91ZGFtcXAuY29tIiwiYm90IjoiZGV2aWNlXzI2MjU1Iiwidmhvc3QiOiJ4aWNvbmZ1bSIsIm1xdHRfd3MiOiJ3c3M6Ly9jbGV2ZXItb2N0b3B1cy5ybXEuY2xvdWRhbXFwLmNvbTo0NDMvd3MvbXF0dCJ9.cQgJWGtTVxXede25vfMgbQMkRK2L0IhJvf4j1YK01WxsXYpieUnCb0vkDHFVVZLaJAsxES8joaaLri0ioQ1f4VXufitLi-kZat1CvPGwqJHnsb6LQGKf_CQltMNSJ7aQTnS-CUN7WUQh3L7vWi6PfSt0S-zycbrAnBlD04ApvOLgE0dD-BresU9fjL8V19joBE4paoqQYL-K7VEsd3KPxfVU83bL90xU2vl7ZTxLPgNKPNzV2jWz3nuwfHaJhIrrAuXCTDPOGcTqtPHjdJWY9pl10ooyZKGljVUQydKXxp5k-FDlO91EDK2NcB7g0c9Q7594m8BwBL5NXv3PpIJrGg"
+farmbot_email = "a.kannenberg@ostfalia.de"
+farmbot_password = "DigitFarmBot2024!"
+farmbot_url = "https://my.farm.bot"
