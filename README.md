@@ -240,6 +240,7 @@ This diagram presents the domain model of the SmartGreenhouse, illustrating the 
 ### Electrical Layout of the Greenhouse
 
 This diagram shows the electrical layout of the SmartGreenhouse, detailing the wiring and connections for automation.
+![Electrical Layout](diagrams/Farmbot%20-%20Smart%20GreenHouse%20electrical%20layout.jpg)
 
 ### Hardware-Components
 
@@ -280,10 +281,6 @@ Smart GreenHouse Electrical Layout - Hardware Components
     - Beleuchtungseinheit im Gewächshaus.
 
 
-
-
-
-![Electrical Layout](diagrams/Farmbot%20-%20Smart%20GreenHouse%20electrical%20layout.jpg)
 
 ### Adding New Tasks to the Scheduler
 
