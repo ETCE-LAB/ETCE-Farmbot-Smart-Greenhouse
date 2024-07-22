@@ -264,7 +264,7 @@ Smart GreenHouse Electrical Layout - Hardware Components
    - Kamera für die Überwachung des Gewächshauses.
 
 6. RPi III (Raspberry Pi III)
-   - Sensor für den Wasserstand.
+   - Ultraschal Sensor für den Wasserstand.
 
 7. Farmduino
    - Steuerungseinheit für den FarmBot.
@@ -272,7 +272,7 @@ Smart GreenHouse Electrical Layout - Hardware Components
 8. FarmBot
    - Automatisiertes Gartensystem.
 
-9. Steckdosen und Verbindungen.
+9. Steckdosen und Verbindungen(Cabels).
 
 10. Pump
     - Pumpe für die Bewässerung.
