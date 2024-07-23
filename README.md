@@ -55,55 +55,52 @@ SmartGreenhouse aims to create an intelligent greenhouse that captures internal 
 ![Electrical Layout](diagrams/Farmbot%20-%20Smart%20GreenHouse%20electrical%20layout.jpg)
 
 
-1. **Power Source**
-   - The main power supply of the system, utilizing the standard household voltage of 230V. This primary source is converted to the necessary voltages for various components: 5V for Raspberry Pis and 12V for pumps and lighting.
+1. **[Power Source](https://www.conrad.de/de/p/as-schwabe-38605-steckdosenleiste-mit-schalter-5fach-schwarz-blau-schutzkontakt-1-st-554185.html?hk=SEM&WT.mc_id=google_pla&gad_source=1&gclid=CjwKCAjwqf20BhBwEiwAt7dtdX-ABvpET5O90LvCdpdZUiPzcTarY--6IHyBcgyYU0xdxWVMScb40xoCEgIQAvD_BwE)**
+   - Provides the primary electricity supply at 230V, converted to necessary operational voltages: 5V for Raspberry Pis and 12V for pumps and lighting systems.
 
-2. **Workstation**
-   - USB Type-C docking station for connecting to the monitor, providing both charging and data connectivity. Required voltage: 5V.
-   - Monitor with Type-C connection for display and control. Required voltage: 5V.
-   - [Notebook wall mount](https://www.conrad.de/de/p/speaka-professional-sp-mm-710-1fach-monitor-wandhalterung-33-0-cm-13-68-6-cm-27-schwarz-hoehenverstellbar-drehba-2588303.html) for ergonomic and space-saving setup.
+2. **[Workstation](https://www.conrad.de/de/p/speaka-professional-sp-mm-710-1fach-monitor-wandhalterung-33-0-cm-13-68-6-cm-27-schwarz-hoehenverstellbar-drehba-2588303.html)**
+   - Features a USB Type-C docking station connected to a monitor, supporting both power charging and data transmission. Required voltage: 5V.
+   - Includes a notebook wall mount for an ergonomic and space-efficient setup.
 
-3. **Raspberry Pi 5**
-   - Used to control various sensors and host the backend system. Required voltage: 5V.
-   - The sensors that we have :
-   - a. [RPi I](https://amzn.eu/d/0fd29NcE) (Raspberry Pi I):Sensors for temperature and humidity.
-        - Model : DHT22 AM2302
+3. **[Raspberry Pi 5](https://www.reichelt.de/raspberry-pi-5-b-4x-2-4-ghz-4-gb-ram-wlan-bt-rasp-pi-5-b-4gb-p359842.html?PROVID=2788&gad_source=1&gclid=CjwKCAjwqf20BhBwEiwAt7dtdSE7gUMOW9vdfBwd9oaYPYIJHRKJHPYXgpAYMLuem95n4GLVpXiythoC27kQAvD_BwE)**
+   - Controls various sensors and hosts the backend system. Required voltage: 5V.
 
-   - b.[RPi II](https://www.reichelt.com/raspberry-pi-kamera-12mp-76-v3-rasp-cam-3-p339256.html?CCOUNTRY=445&LANGUAGE=de&utm_source=display&utm_medium=rsp-foundation&src=raspberrypi&&r=1)(Raspberry Pi II):
-   Camera for monitoring the greenhouse.
-        - Model : RASP CAM 3
+4. **[Temperature and Humidity Sensor](https://amzn.eu/d/0fd29NcE)**
+   - Monitors and maintains optimal climate conditions within the greenhouse using the **DHT22 AM2302** sensor.
 
-   - c. [RPi III](https://amzn.eu/d/0gpDR76l) (Raspberry Pi III):
-      Ultrasonic sensor for measuring water level.
-        - Model : HC-SR04
+5. **[Greenhouse Surveillance Camera](https://www.reichelt.com/raspberry-pi-kamera-12mp-76-v3-rasp-cam-3-p339256.html?CCOUNTRY=445&LANGUAGE=de&utm_source=display&utm_medium=rsp-foundation&src=raspberrypi&&r=1)**
+   - Enhances security and operational oversight through high-resolution visual monitoring with the **RASP CAM 3**.
 
-5. **[FarmBot](https://farm.bot/products/farmbot-genesis-v1-7)**
-   - An automated gardening system that manages plant care from sowing to harvest. Required voltage: 12V.
+6. **[Ultrasonic Water Level Sensor](https://amzn.eu/d/0gpDR76l)**
+   - Ensures accurate water levels in tanks with the **HC-SR04** sensor, supporting precise irrigation management.
 
-6. **[Sockets and Connections](https://www.conrad.de/de/p/brennenstuhl-1161750020-strom-verlaengerungskabel-gelb-blau-5-00-m-at-n05v3v3-f-3g-1-5-mm-2303709.html)**
-   - Waterproof sockets and cables that ensure reliable connection and power supply to all components.
+7. **[FarmBot](https://farm.bot/products/farmbot-genesis-v1-7)**
+   - Automates garden management from sowing to harvesting. Required voltage: 12V.
 
-7. **[Pump](https://www.conrad.de/de/p/toolcraft-to-7159158-niedervolt-druckwasserpumpe-1020-l-h-12-v-dc-2386386.html)**
-   - Supplies pressurized water for the FarmBot. Required voltage: 12V.
+8. **[Sockets and Connections](https://www.conrad.de/de/p/brennenstuhl-1161750020-strom-verlaengerungskabel-gelb-blau-5-00-m-at-n05v3v3-f-3g-1-5-mm-2303709.html)**
+   - Provides waterproof sockets and cables for reliable connections and power supply to all system components.
 
-8. **[Power Converter for the Pump](https://led-profi.de/led-trafo-netzteil/12v-led-trafos-standard/165498859/led-trafo-12v-180w-15a-mm-pfc-dc-schaltnetzteil-slim-line-ftpc200v12-moebel?c=1929341)**
-   - Converts 230V to 12V for the pump, ensuring sufficient amperage.
+9. **[Pump](https://www.conrad.de/de/p/toolcraft-to-7159158-niedervolt-druckwasserpumpe-1020-l-h-12-v-dc-2386386.html)**
+   - Delivers pressurized water to the FarmBot, ensuring adequate water flow. Required voltage: 12V.
 
-9. **[TAPO Sockets](https://www.reichelt.de/de/de/schaltbare-wlan-steckdose-tplink-tapo-p100-p270914.html?PROVID=2788&gad_source=1&gclid=CjwKCAjwhvi0BhA4EiwAX25uj2u371wdbBkpY8luAcP6tm1R22U-9cxW5mjwfDROY-HqNlhTUYKzmxoCkgkQAvD_BwE&&r=1)**
-   - Controllable power sockets that can be toggled via Raspberry Pi to enable or disable the pump or other accessories.
+10. **[Power Converter for the Pump](https://led-profi.de/led-trafo-netzteil/12v-led-trafos-standard/165498859/led-trafo-12v-180w-15a-mm-pfc-dc-schaltnetzteil-slim-line-ftpc200v12-moebel?c=1929341)**
+    - Converts 230V to 12V, providing the pump with the necessary amperage.
 
-10. **[Snail Defense System](https://www.onlineshop-reich.de/garten/schaedlingsbekaempfung/snailstop-elektrischer-schneckenzaun-schnecken-stop-zuverlaessig-und-ohne-gift_30100_4145)**
-   - A non-lethal defensive system against snails, ensuring they do not harm the plants.
+11. **[TAPO Sockets](https://www.reichelt.de/de/de/schaltbare-wlan-steckdose-tplink-tapo-p100-p270914.html?PROVID=2788&gad_source=1&gclid=CjwKCAjwhvi0BhA4EiwAX25uj2u371wdbBkpY8luAcP6tm1R22U-9cxW5mjwfDROY-HqNlhTUYKzmxoCkgkQAvD_BwE&&r=1)**
+    - Enables control over power sockets via Raspberry Pi, facilitating the management of the pump and other accessories.
 
-11. **Gardena and Hose Connections**
-    - Quick connectors to link hoses and the FarmBot system.
-    - 3/4-inch hose to connect the rain barrel to the pump and FarmBot.
+12. **[Snail Defense System](https://www.onlineshop-reich.de/garten/schaedlingsbekaempfung/snailstop-elektrischer-schneckenzaun-schnecken-stop-zuverlaessig-und-ohne-gift_30100_4145)**
+    - Provides a non-lethal barrier against snails, protecting plants from damage.
 
-12. **[Rain Barrel](https://www.obi.de/p/6739676/garantia-regentonne-rund-210-l-gruen)**
-    - Stores collected rainwater for irrigation purposes.
+13. **[Gardena and Hose Connections](https://www.amazon.de/s?k=gardena+connector+3%2F4&crid=2T1J00APX5BKX&sprefix=gardena+conne%2Caps%2C125&ref=nb_sb_ss_pltr-xclick_3_13)**
+    - Features quick connectors and a 3/4-inch hose for seamless integration with the rain barrel and FarmBot systems.
 
-13. **[Float Valve](https://www.siepmann.net/SIMA_Ersatzventil.html)**
-    - Automatically refills the rain barrel to prevent the pump from running dry.
+14. **[Rain Barrel](https://www.obi.de/p/6739676/garantia-regentonne-rund-210-l-gruen)**
+    - Collects and stores rainwater for efficient irrigation use.
+
+15. **[Float Valve](https://www.siepmann.net/SIMA_Ersatzventil.html)**
+    - Automatically tracks the water level in the rain barrel, preventing the pump from running dry.
+
 
 ## Usage
 
