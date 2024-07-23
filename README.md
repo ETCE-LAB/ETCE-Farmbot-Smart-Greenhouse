@@ -66,9 +66,8 @@ SmartGreenhouse aims to create an intelligent greenhouse that captures internal 
 3. **Raspberry Pi 5**
    - Used to control various sensors and host the backend system. Required voltage: 5V.
    - The sensors that we have :
-   - a. [RPi I](https://amzn.eu/d/0fd29NcE) (Raspberry Pi I):
-Sensors for temperature and humidity.
-         - Model : DHT22 AM2302
+   - a. [RPi I](https://amzn.eu/d/0fd29NcE) (Raspberry Pi I):Sensors for temperature and humidity.
+        - Model : DHT22 AM2302
 
    - b.[RPi II](https://www.reichelt.com/raspberry-pi-kamera-12mp-76-v3-rasp-cam-3-p339256.html?CCOUNTRY=445&LANGUAGE=de&utm_source=display&utm_medium=rsp-foundation&src=raspberrypi&&r=1)(Raspberry Pi II):
    Camera for monitoring the greenhouse.
