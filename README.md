@@ -65,6 +65,15 @@ SmartGreenhouse aims to create an intelligent greenhouse that captures internal 
 
 3. **Raspberry Pi 5**
    - Used to control various sensors and host the backend system. Required voltage: 5V.
+   - The sensors that we have :
+   a. RPi I (Raspberry Pi I):
+         Sensors for temperature and humidity.
+
+   b.RPi II (Raspberry Pi II):
+      Camera for monitoring the greenhouse.
+
+   c.RPi III (Raspberry Pi III):
+      Ultrasonic sensor for measuring water level.
 
 4. **[FarmBot](https://farm.bot/products/farmbot-genesis-v1-7)**
    - An automated gardening system that manages plant care from sowing to harvest. Required voltage: 12V.
