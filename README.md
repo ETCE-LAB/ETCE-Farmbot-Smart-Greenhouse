@@ -68,15 +68,15 @@ SmartGreenhouse aims to create an intelligent greenhouse that captures internal 
    - The sensors that we have :
    - a. [RPi I](https://amzn.eu/d/0fd29NcE) (Raspberry Pi I):
 Sensors for temperature and humidity.
-Modelle: DHT22 AM2302
+Model : DHT22 AM2302
 
    - b.RPi II(Raspberry Pi II):
    Camera for monitoring the greenhouse.
-   Modelle
+  Model 
 
    - c. [RPi III](https://amzn.eu/d/0gpDR76l) (Raspberry Pi III):
       Ultrasonic sensor for measuring water level.
-     Modelle:HC-SR04
+     Model :HC-SR04
 
 5. **[FarmBot](https://farm.bot/products/farmbot-genesis-v1-7)**
    - An automated gardening system that manages plant care from sowing to harvest. Required voltage: 12V.
