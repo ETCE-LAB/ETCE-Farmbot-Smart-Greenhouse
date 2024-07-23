@@ -68,11 +68,11 @@ SmartGreenhouse aims to create an intelligent greenhouse that captures internal 
    - The sensors that we have :
    - a. [RPi I](https://amzn.eu/d/0fd29NcE) (Raspberry Pi I):
 Sensors for temperature and humidity.
-Model : DHT22 AM2302
+         - Model : DHT22 AM2302
 
    - b.[RPi II](https://www.reichelt.com/raspberry-pi-kamera-12mp-76-v3-rasp-cam-3-p339256.html?CCOUNTRY=445&LANGUAGE=de&utm_source=display&utm_medium=rsp-foundation&src=raspberrypi&&r=1)(Raspberry Pi II):
    Camera for monitoring the greenhouse.
-  Model : RASP CAM 3
+        - Model : RASP CAM 3
 
    - c. [RPi III](https://amzn.eu/d/0gpDR76l) (Raspberry Pi III):
       Ultrasonic sensor for measuring water level.
