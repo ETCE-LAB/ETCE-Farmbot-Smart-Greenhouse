@@ -76,7 +76,7 @@ Model : DHT22 AM2302
 
    - c. [RPi III](https://amzn.eu/d/0gpDR76l) (Raspberry Pi III):
       Ultrasonic sensor for measuring water level.
-     Model : HC-SR04
+        - Model : HC-SR04
 
 5. **[FarmBot](https://farm.bot/products/farmbot-genesis-v1-7)**
    - An automated gardening system that manages plant care from sowing to harvest. Required voltage: 12V.
