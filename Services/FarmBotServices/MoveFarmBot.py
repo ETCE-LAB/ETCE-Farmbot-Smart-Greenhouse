@@ -1,5 +1,5 @@
 from urllib.error import HTTPError
-from farmbot import Farmbot, FarmbotToken
+from farmbot import Farmbot
 import config
 
 
