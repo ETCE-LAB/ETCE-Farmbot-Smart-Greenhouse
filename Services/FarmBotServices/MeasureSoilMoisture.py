@@ -3,6 +3,8 @@ import time
 from urllib.error import HTTPError
 import config
 from Services.FarmBotServices.MoveFarmBot import move_to
+from DataLayer.Models.GreenHouseModel import GreenHouseData
+from DataLayer.GreenHouseRepository import add_greenhouse_data
 import json
 import requests
 
@@ -45,13 +47,11 @@ def measure_soil_moisture_sequence():
         x_po = latest_reading['x']
         y_po = latest_reading['y']
         z_po = latest_reading['z']
-        print("Latest Value:", latest_value)
-        print("Created At:", latest_created_at)
-        print("Read At:", latest_read_at)
-        print("pin:", pin)
-        print("x_po:", x_po)
-        print("y_po:", y_po)
-        print("z_po:", z_po)
+        Soil_Moisture_Data=GreenHouseData( date=latest_read_at,sensor='Soil Moisture',cordinates=f"{x_po}{','}{y_po}{','}{z_po}",temperature=None,humidity=None,soilmoisture=float(latest_value))
+        print(Soil_Moisture_Data)
+
+        add_greenhouse_data(Soil_Moisture_Data)
+
         ## incase for manual data insertion into sqlite3 use below commented codes
         # db_path = os.path.join('/home/rpi/ETCE-Farmbot-Smart-Greenhouse/instance', 'smart_greenhouse.db')  # Use a relative path
         # conn=sqlite3.connect(db_path)
@@ -68,6 +68,7 @@ def measure_soil_moisture_sequence():
         # except sqlite3.Error as e:
         #     print("An error occurred:", e)
         # fb.on(7)
+
         move_to(1600,400,0)
         move_to(100,83,0)
         move_to(100,83,414)
