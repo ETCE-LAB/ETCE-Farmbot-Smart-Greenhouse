@@ -2,44 +2,10 @@ from farmbot import Farmbot
 import time
 from urllib.error import HTTPError
 import config
+from Services.FarmBotServices.MoveFarmBot import move_to
+import json
+import requests
 
-
-COORDINATES = {
-    'home': (0, 0, 0),
-    'soil_sensor_safe': (15, 83, 0),  # -380),
-    'soil_sensor': (15, 83, 0),  # -414),
-    'point3': (115, 83, 0),  # -414),
-    'point4': (400, 600, 0),  # -475),
-    'point5': (1000, 600, 0),  # -470),
-    'point6': (2100, 600, 0)  # -480)
-}
-
-
-class SoilMoistureHandler:
-    def __init__(self, bot):
-        self.bot = bot
-
-    def measure_soil_moisture(self):
-        # Sequence of points to visit, add or remove points as needed
-        points_sequence = [
-            'home', 'point1', 'point2', 'point3', 'point4', 'home',
-            'point4', 'home', 'point5', 'home', 'point6', 'home',
-            'point3', 'point2', 'home'
-        ]
-
-        for point in points_sequence:
-            x, y, z = COORDINATES[point]
-            self.bot.move_absolute(x=x, y=y, z=z)
-            print(f"Moving to {point} at coordinates ({x}, {y}, {z})")
-            time.sleep(0.1)  # Short wait for move completion; adjust as needed
-
-            if z < 0:  # Assuming we only measure moisture when the z-coordinate is below zero
-                self.read_soil_moisture_pin()
-
-    def read_soil_moisture_pin(self):
-        # TODO: Implement the actual pin reading logic here and save to database
-        print("Reading soil moisture level from sensor...")
-        time.sleep(0.3)  # Simulate the wait time after reading
 
 
 def measure_soil_moisture_sequence():
@@ -52,8 +18,63 @@ def measure_soil_moisture_sequence():
     fb.set_token(token)
 
     try:
-        fb.connect()
-        soil_moisture_handler.measure_soil_moisture()
+        fb.on(7) # turn on bot led light
+        move_to(1,1,0)
+        move_to(15,83,0)
+        move_to(15,83,414)
+        move_to(100,83,414)
+        move_to(100,83,0)
+        move_to(1600,400,0)
+        move_to(1600,400,500)
+        fb.read_sensor('Soil Sensor')
+        time.sleep(5) # needs sometime to read
+        # start of reading data from farmbot
+        url_read = f'https://my.farm.bot:443/api/sensor_readings'
+        headers = {'Authorization': 'Bearer ' + token['token']['encoded'],'content-type': 'application/json'}
+        response = requests.get(url_read, headers=headers)
+        sensor_data = response.json()
+        pin_59_readings = [entry for entry in sensor_data if entry['pin'] == 59]
+        # Sort the filtered readings by 'read_at' in descending order to get the latest reading first
+        latest_reading = sorted(pin_59_readings, key=lambda x: x['read_at'], reverse=True)[0]
+        print(latest_reading)
+        # Extract value, created_at, and read_at into separate variables
+        latest_value = latest_reading['value']
+        latest_created_at = latest_reading['created_at']
+        latest_read_at = latest_reading['read_at']
+        pin= latest_reading['pin']
+        x_po = latest_reading['x']
+        y_po = latest_reading['y']
+        z_po = latest_reading['z']
+        print("Latest Value:", latest_value)
+        print("Created At:", latest_created_at)
+        print("Read At:", latest_read_at)
+        print("pin:", pin)
+        print("x_po:", x_po)
+        print("y_po:", y_po)
+        print("z_po:", z_po)
+        ## incase for manual data insertion into sqlite3 use below commented codes
+        # db_path = os.path.join('/home/rpi/ETCE-Farmbot-Smart-Greenhouse/instance', 'smart_greenhouse.db')  # Use a relative path
+        # conn=sqlite3.connect(db_path)
+        # cursor = conn.cursor()
+        # sql_insert = """INSERT INTO farm_bot_data (measurement, value, pin, x_position, y_position, z_position, read_at, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?);"""
+        # # Step 3: Define the values to insert
+        # values = ('soil_moisture',latest_value, 59, x_po, y_po, z_po, latest_read_at, latest_created_at)  # Replace with actual values
+        # try:
+        #     # Step 4: Execute the command
+        #     cursor.execute(sql_insert, values)
+        #     # Step 5: Commit the transaction
+        #     conn.commit()
+        #     print("Data inserted successfully.")
+        # except sqlite3.Error as e:
+        #     print("An error occurred:", e)
+        # fb.on(7)
+        move_to(1600,400,0)
+        move_to(100,83,0)
+        move_to(100,83,414)
+        move_to(15,83,414)
+        move_to(15,83,0)
+        move_to(1,1,0)
+        fb.off(7) # turn off led
     finally:
         print("Measurement sequence completed.")
 
