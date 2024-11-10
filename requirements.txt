@@ -5,7 +5,7 @@ blinker==1.8.2
 certifi==2024.2.2
 charset-normalizer==3.3.2
 click==8.1.7
-farmbot==1.1.0
+farmbot
 Flask==3.0.3
 flask-restx==1.3.0
 Flask-SQLAlchemy==3.1.1
