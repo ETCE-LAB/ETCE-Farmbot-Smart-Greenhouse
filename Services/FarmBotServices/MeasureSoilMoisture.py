@@ -4,16 +4,6 @@ from urllib.error import HTTPError
 import config
 
 
-def get_farmbot_token(email, password, url):
-    try:
-        raw_token = FarmbotToken.download_token(email, password, url)
-        return raw_token
-    except HTTPError as e:
-        error_message = e.read().decode()
-        print(f"HTTP Error {e.code}: {error_message}")
-        exit(1)
-
-
 COORDINATES = {
     'home': (0, 0, 0),
     'soil_sensor_safe': (15, 83, 0),  # -380),
@@ -57,15 +47,14 @@ def measure_soil_moisture_sequence():
     password = config.farmbot_password
     url = config.farmbot_url
 
-    token = get_farmbot_token(email, password, url)
-    fb = Farmbot(token)
-    soil_moisture_handler = SoilMoistureHandler(fb)
+    fb = Farmbot()
+    token=fb.get_token(email,password,url)
+    fb.set_token(token)
 
     try:
         fb.connect()
         soil_moisture_handler.measure_soil_moisture()
     finally:
-        fb.disconnect()
         print("Measurement sequence completed.")
 
 
