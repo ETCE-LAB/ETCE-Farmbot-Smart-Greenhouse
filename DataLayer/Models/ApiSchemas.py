@@ -27,6 +27,8 @@ def create_models(api):
     greenhouse_model = api.model('GreenHouseData', {
         'id': fields.Integer(description='The unique identifier of the measurement'),
         'date': fields.String(required=True, description='The date of the reading'),
+        'sensor': fields.String(required=True, description='The date of the reading'),
+        'cordinates': fields.String(required=True, description='The date of the reading'),
         'temperature': fields.Float(description='The temperature in °C'),
         'humidity': fields.Float(description='The humidity in %'),
         'soilmoisture': fields.Float(description='The soilmoisture in %')
