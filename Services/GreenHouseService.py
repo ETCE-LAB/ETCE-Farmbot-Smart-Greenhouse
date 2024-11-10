@@ -12,13 +12,13 @@ def is_raspberry_pi():
     except Exception:
         return False
 
-
-if is_raspberry_pi():
-    import board
-    import adafruit_dht
-else:
-    board = None
-    adafruit_dht = None
+# because either board and adafruit has to be installed or removing this part, as the measurement has to be done by pico
+# if is_raspberry_pi():
+#     import board
+#     import adafruit_dht
+# else:
+#     board = None
+#     adafruit_dht = None
 
 
 def measure_and_store_data():
