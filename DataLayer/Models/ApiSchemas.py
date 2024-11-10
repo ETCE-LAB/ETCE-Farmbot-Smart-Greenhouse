@@ -28,7 +28,9 @@ def create_models(api):
         'id': fields.Integer(description='The unique identifier of the measurement'),
         'date': fields.String(required=True, description='The date of the reading'),
         'temperature': fields.Float(description='The temperature in °C'),
-        'humidity': fields.Float(description='The humidity in %')
+        'humidity': fields.Float(description='The humidity in %'),
+        'soilmoisture': fields.Float(description='The soilmoisture in %')
     })
 
+    
     return weather_station_model, weather_forecast_model, water_management_model, greenhouse_model
