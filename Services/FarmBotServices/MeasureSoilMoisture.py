@@ -1,4 +1,4 @@
-from farmbot import Farmbot, FarmbotToken
+from farmbot import Farmbot
 import time
 from urllib.error import HTTPError
 import config
