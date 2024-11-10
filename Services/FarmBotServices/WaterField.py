@@ -3,16 +3,6 @@ import config
 from urllib.error import HTTPError
 
 
-def get_farmbot_token(email, password, url):
-    try:
-        raw_token = FarmbotToken.download_token(email, password, url)
-        return raw_token
-    except HTTPError as e:
-        error_message = e.read().decode()
-        print(f"HTTP Error {e.code}: {error_message}")
-        exit(1)
-
-
 class WateringOperationsHandler:
     def __init__(self, nozzle_pickup):
         self.nozzle_pickup = nozzle_pickup
@@ -78,7 +68,8 @@ class WateringOperationsHandler:
 
 
 def execute_watering_sequence():
-    token = get_farmbot_token(config.farmbot_email, config.farmbot_password, config.farmbot_url)
-    fb = Farmbot(token)
+    fb = Farmbot()
+    token=fb.get_token(config.farmbot_email, config.farmbot_password, config.farmbot_url)
+    fb.set_token(token)
     handler = WateringOperationsHandler(nozzle_pickup=(9, 1074, -410))
     fb.connect(handler)

@@ -3,16 +3,6 @@ import config
 from urllib.error import HTTPError
 
 
-def get_farmbot_token(email, password, url):
-    try:
-        raw_token = FarmbotToken.download_token(email, password, url)
-        return raw_token
-    except HTTPError as e:
-        error_message = e.read().decode()
-        print(f"HTTP Error {e.code}: {error_message}")
-        exit(1)
-
-
 class MoveHome:
     def __init__(self, target_x, target_y, target_z):
         self.target_x = 0
@@ -47,7 +37,8 @@ class MoveHome:
 
 
 def go_home():
-    token = get_farmbot_token(config.farmbot_email, config.farmbot_password, config.farmbot_url)
-    fb = Farmbot(token)
+    fb = Farmbot()
+    token=fb.get_token(config.farmbot_email, config.farmbot_password, config.farmbot_url)
+    fb.set_token(token)
     handler = MoveHome(0, 0, 0)
     fb.connect(handler)

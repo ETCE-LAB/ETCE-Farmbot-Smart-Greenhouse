@@ -3,16 +3,6 @@ from farmbot import Farmbot
 import config
 
 
-def get_farmbot_token(email, password, url):
-    try:
-        raw_token = FarmbotToken.download_token(email, password, url)
-        return raw_token
-    except HTTPError as e:
-        error_message = e.read().decode()
-        print(f"HTTP Error {e.code}: {error_message}")
-        exit(1)
-
-
 class MyHandler:
     def __init__(self, target_x, target_y, target_z):
         self.target_x = target_x
@@ -51,8 +41,9 @@ def move_to(x, y, z):
     password = config.farmbot_password
     url = config.farmbot_url
 
-    token = get_farmbot_token(email, password, url)
-    fb = Farmbot(token)
+    fb = Farmbot()
+    token=fb.get_token(email,password,url)
+    fb.set_token(token)
 
     handler = MyHandler(x, y, -z)
     try:
