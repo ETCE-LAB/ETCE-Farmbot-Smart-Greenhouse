@@ -2,7 +2,9 @@ import time
 from datetime import datetime
 from DataLayer import GreenHouseRepository
 from DataLayer.Models.GreenHouseModel import GreenHouseData
-
+from Services.FarmBotServices import MeasureSoilMoisture
+from Services.Interfaces.IGreenHouseService import IGreenHouseService
+from app import app
 
 def is_raspberry_pi():
     try:
@@ -20,6 +22,10 @@ def is_raspberry_pi():
 #     board = None
 #     adafruit_dht = None
 
+class GreenHouseService(IGreenHouseService):
+    def measure_soil_moisture(self):
+        with app.app_context():
+            MeasureSoilMoisture.measure_soil_moisture_sequence()
 
 def measure_and_store_data():
     if not is_raspberry_pi():

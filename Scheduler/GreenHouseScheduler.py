@@ -1,7 +1,8 @@
 from Scheduler.SchedulerClass import SchedulerService
-from Services import GreenHouseService
+from Services.GreenHouseService import GreenHouseService
 
+Green_house_service=GreenHouseService()
 
 scheduler_service = SchedulerService()
 
-scheduler_service.add_job(GreenHouseService.measure_and_store_data, 'interval', hours=1)  # run every hour
+scheduler_service.add_job(Green_house_service.measure_soil_moisture, 'interval', minutes=30)  # run every hour

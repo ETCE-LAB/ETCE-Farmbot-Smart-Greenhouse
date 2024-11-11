@@ -33,6 +33,7 @@ def get_humidity_by_date(date):  # TODO: fix endpoint returning empty list
 def add_greenhouse_data(data):
     db.session.add(data)
     db.session.commit()
+    print('Soil moisture data added to DB')
 
 
 def get_all_data():

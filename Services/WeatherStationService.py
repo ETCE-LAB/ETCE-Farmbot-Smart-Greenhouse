@@ -7,9 +7,8 @@ from DataLayer.WeatherStationRepository import add_weather_data, get_weather_dat
 from Services.Interfaces.IWeatherStationService import IWeatherStationService
 from app import app
 
-
 class WeatherStationService(IWeatherStationService):
-
+        
     def fetch_weather_station_data(self):
         with app.app_context():
             headers = {

@@ -13,4 +13,4 @@ class GreenHouseData(db.Model):
     fetched_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
     def __repr__(self):
-        return f"<WaterManagementData  {self.sensor} {self.cordinates} {self.temperature} {self.humidity} {self.soilmoisture} {self.date}>"
+        return f"<GreenHouseData  {self.date} {self.sensor} {self.cordinates} {self.temperature} {self.humidity} {self.soilmoisture}>"
