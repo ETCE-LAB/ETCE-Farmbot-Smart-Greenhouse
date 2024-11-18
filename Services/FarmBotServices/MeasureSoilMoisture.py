@@ -28,7 +28,7 @@ def measure_soil_moisture_sequence():
                 connected = False
 
         try:
-            # fb.on(7) # turn on bot led light
+            fb.on(7) # turn on bot led light
             move_to(1,1,0)
             move_to(15,83,0)
             move_to(15,83,414)
@@ -64,7 +64,7 @@ def measure_soil_moisture_sequence():
             move_to(15,83,414)
             move_to(15,83,0)
             move_to(1,1,0)
-            # fb.off(7) # turn off led
+            fb.off(7) # turn off led
         finally:
             print("Measurement sequence completed.")
         
