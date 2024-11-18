@@ -4,7 +4,9 @@ from DataLayer import GreenHouseRepository
 from DataLayer.Models.GreenHouseModel import GreenHouseData
 from Services.FarmBotServices import MeasureSoilMoisture
 from Services.Interfaces.IGreenHouseService import IGreenHouseService
+from DataLayer.GreenHouseRepository import add_greenhouse_data
 from app import app
+import requests
 
 def is_raspberry_pi():
     try:
@@ -26,6 +28,31 @@ class GreenHouseService(IGreenHouseService):
     def measure_soil_moisture(self):
         with app.app_context():
             MeasureSoilMoisture.measure_soil_moisture_sequence()
+    def measure_temp_humidity(self):
+        with app.app_context():
+            measure_temperature_humidity()
+
+def measure_temperature_humidity():
+    url = "http://172.20.10.11"  ###replace it by pico IP
+    for i in range(3):
+        try:
+            response=requests.get(url)
+            if response.status_code == 200:
+                data = response.json()
+                print(data)
+                temp=data["temp"]
+                humi=data["humi"]
+                print('temperature: ',temp)
+                print('humidity: ',humi)
+                Greenhouse_Data=GreenHouseData( date = datetime.now().strftime('%Y-%m-%d %H:%M:%S'),sensor='DHT22',cordinates="Mounted in Greenhouse",temperature=float(temp),humidity=float(humi),soilmoisture=float(0.0))
+                add_greenhouse_data(Greenhouse_Data)
+                break
+            else:
+                print('failed to get temperature humidity response')
+        except requests.exceptions.RequestException as e:
+            print('connection to temperature humidity pico-w error:', e)
+            time.sleep(1)
+
 
 def measure_and_store_data():
     if not is_raspberry_pi():
