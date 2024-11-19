@@ -15,10 +15,13 @@ def measure_soil_moisture_sequence():
     with app.app_context():
         connected = False
         while not connected:
+            # get credential from config.py file
             email = config.farmbot_email
             password = config.farmbot_password
             url = config.farmbot_url
+
             try:
+                # connecting to farmbot web service needs to generate toekn, with the new farmbot 2.0.5 library it generates as below and get connected
                 fb = Farmbot()
                 token=fb.get_token(email,password,url)
                 fb.set_token(token)
@@ -29,6 +32,7 @@ def measure_soil_moisture_sequence():
 
         try:
             fb.on(7) # turn on bot led light
+            # the move functionality is defined in the farmbotservices, which can be later merged in one script
             move_to(1,1,0)
             move_to(15,83,0)
             move_to(15,83,414)
@@ -36,6 +40,7 @@ def measure_soil_moisture_sequence():
             move_to(100,83,0)
             move_to(1600,400,0)
             move_to(1600,400,500)
+            # the below code, reads the sensor, and store value in farmbot webapp
             fb.read_sensor('Soil Sensor')
             time.sleep(2) # needs sometime to read
             # start of reading data from farmbot
@@ -69,10 +74,12 @@ def measure_soil_moisture_sequence():
             print("Measurement sequence completed.")
         
         try:
+            # here we read the measured data, and choosing the latest measurment 
             url_read = f'https://my.farm.bot:443/api/sensor_readings'
             headers = {'Authorization': 'Bearer ' + token['token']['encoded'],'content-type': 'application/json'}
             response = requests.get(url_read, headers=headers)
             sensor_data = response.json()
+            # filtering the read values by pin 59, which is soil measurment sensor pin
             pin_59_readings = [entry for entry in sensor_data if entry['pin'] == 59]
             # Sort the filtered readings by 'read_at' in descending order to get the latest reading first
             latest_reading = sorted(pin_59_readings, key=lambda x: x['read_at'], reverse=True)[0]
@@ -85,9 +92,10 @@ def measure_soil_moisture_sequence():
             x_po = latest_reading['x']
             y_po = latest_reading['y']
             z_po = latest_reading['z']
+            # modeling data based on the defined model in greenhouse model
             Soil_Moisture_Data=GreenHouseData( date=latest_read_at,sensor='Soil Moisture',cordinates=f"{x_po}{','}{y_po}{','}{z_po}",temperature=float(0.0),humidity=(0.0),soilmoisture=float(latest_value))
             # print(Soil_Moisture_Data)
-
+            # adding data by calling the function from greenhouse repository
             add_greenhouse_data(Soil_Moisture_Data)
         except Exception as e:
             print('Soil moisture data record Exception: ', e)
